@@ -1,0 +1,81 @@
+<div class="container-fluid">
+  <div class="row d-flex">
+    <div class="col-12">
+      <app-menu></app-menu>
+    </div>
+    <div class="col-12 justify-content-center d-flex">
+      <h1 class="h4">
+        Usuarios
+      </h1>
+    </div>
+    <div class="col-12 justify-content-end d-flex">
+     <a role="button" [routerLink]="['alta-usuarios']" class="btn btn-success mx-4">Agregar <i class="fa-solid fa-plus"></i></a>
+
+      <a role="button" [routerLink]="['grafica-usuarios']" class="btn btn-success mx-4">Grafica<i class="fa-solid fa-chart-pie"></i></a>
+    </div>
+    <div class="col-12">
+      <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+      <table mat-table matSort (matSortChange)="sortEvent($event)"  [dataSource]="dataSource">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell
+			  mat-sort-header="idUsuario"
+			  *matHeaderCellDef>
+            <mat-form-field>
+              <label for="idFitler">
+                ID
+              </label>
+              <input matInput [(ngModel)]="idFilter" id="idFitler">
+            </mat-form-field>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <a [routerLink]="['detalle-usuario' , element.idUsuario]" class="link-info">{{element.idUsuario}}   </a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell
+			  mat-sort-header="nombre"
+			  *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let element ">{{element.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="aPaterno">
+          <th mat-header-cell *matHeaderCellDef>Paterno</th>
+          <td mat-cell *matCellDef="let element">{{element.aPaterno}} </td>
+        </ng-container>
+        <ng-container matColumnDef="aMaterno">
+          <th mat-header-cell *matHeaderCellDef>Materno</th>
+          <td mat-cell *matCellDef="let element">{{element.aMaterno}} </td>
+        </ng-container>
+        <ng-container matColumnDef="idEstatus">
+          <th mat-header-cell *matHeaderCellDef>Estatus</th>
+          <td mat-cell *matCellDef="let element">{{element.idEstatus}} </td>
+        </ng-container>
+        <ng-container matColumnDef="idPerfil">
+          <th mat-header-cell *matHeaderCellDef>perfil</th>
+          <td mat-cell *matCellDef="let element">{{element.idPerfil}} </td>
+        </ng-container>
+        <ng-container matColumnDef="folio">
+          <th mat-header-cell *matHeaderCellDef>folio</th>
+          <td mat-cell *matCellDef="let element">{{element.folio}} </td>
+        </ng-container>
+        <ng-container matColumnDef="opciones">
+          <th mat-header-cell *matHeaderCellDef>Opciones</th>
+          <td mat-cell *matCellDef="let element">
+            <a [routerLink]="['editar-usuario' , element.idUsuario]"  class="btn btn-success mx-1"><i class="fas fa-edit"></i></a>
+            <a [routerLink]="['detalle-usuario' , element.idUsuario]" class="btn btn-success mx-1"><i class="fa-solid fa-circle-info"></i></a>
+            <a class="btn btn-danger mx-1"><i class="fa-solid fa-trash"></i></a>
+          </td>
+
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayColumns">
+
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+      </table>
+      <mat-paginator #paginator [length]="length" [pageIndex]="currentPage" [pageSize]="pageSize"
+                     showFirstLastButtons
+                     (page)="pageChenged($event)" [pageSizeOptions]="pageSizeOptions"
+                     aria-label="Select page"></mat-paginator>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,43 @@
+<div class="container  ">
+  <div class="row d-flex justify-content-center">
+    <div class="col-4 mx-auto">
+  <div class="form-container">
+    <form class="" [formGroup]="form" (ngSubmit)="login()">
+      <div class="form-control-container text-center">
+        <h1 class="h5"> Iniciar Session</h1>
+      </div>
+      <div class="form-control-container">
+        <mat-form-field>
+          <mat-label for="username">
+            Usuario:
+          </mat-label>
+          <input type="text" matInput formControlName="username">
+        </mat-form-field>
+      </div>
+
+      <div class="form-control-container">
+        <mat-form-field>
+          <mat-label for="password">
+            Contraseña
+          </mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'ocultar contraseña'"
+                  [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div class="justify-content-center d-flex">
+        <button [disabled]="!form.valid" class="btn btn-success" type="submit">
+          Iniciar Session
+        </button>
+      </div>
+
+    </form>
+  </div>
+    </div>
+  </div>
+</div>
+
+
+
