@@ -1,81 +1,259 @@
 <div class="container-fluid">
-  <div class="row d-flex">
-    <div class="col-12">
-      <app-menu></app-menu>
-    </div>
-    <div class="col-12 justify-content-center d-flex">
-      <h1 class="h4">
-        Usuarios
-      </h1>
-    </div>
-    <div class="col-12 justify-content-end d-flex">
-     <a role="button" [routerLink]="['alta-usuarios']" class="btn btn-success mx-4">Agregar <i class="fa-solid fa-plus"></i></a>
+	<app-ng-notification></app-ng-notification>
+	<div class="row d-flex">
+		<div class="col-12">
+			<app-menu></app-menu>
+		</div>
+		<div class="col-12 justify-content-center d-flex">
+			<h1 class="h4">
+				Usuarios
+			</h1>
+		</div>
 
-      <a role="button" [routerLink]="['grafica-usuarios']" class="btn btn-success mx-4">Grafica<i class="fa-solid fa-chart-pie"></i></a>
-    </div>
-    <div class="col-12">
-      <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-      <table mat-table matSort (matSortChange)="sortEvent($event)"  [dataSource]="dataSource">
-        <ng-container matColumnDef="id">
-          <th mat-header-cell
-			  mat-sort-header="idUsuario"
-			  *matHeaderCellDef>
-            <mat-form-field>
-              <label for="idFitler">
-                ID
-              </label>
-              <input matInput [(ngModel)]="idFilter" id="idFitler">
-            </mat-form-field>
-          </th>
-          <td mat-cell *matCellDef="let element">
-            <a [routerLink]="['detalle-usuario' , element.idUsuario]" class="link-info">{{element.idUsuario}}   </a>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="nombre">
-          <th mat-header-cell
-			  mat-sort-header="nombre"
-			  *matHeaderCellDef>Nombre</th>
-          <td mat-cell *matCellDef="let element ">{{element.nombre}} </td>
-        </ng-container>
-        <ng-container matColumnDef="aPaterno">
-          <th mat-header-cell *matHeaderCellDef>Paterno</th>
-          <td mat-cell *matCellDef="let element">{{element.aPaterno}} </td>
-        </ng-container>
-        <ng-container matColumnDef="aMaterno">
-          <th mat-header-cell *matHeaderCellDef>Materno</th>
-          <td mat-cell *matCellDef="let element">{{element.aMaterno}} </td>
-        </ng-container>
-        <ng-container matColumnDef="idEstatus">
-          <th mat-header-cell *matHeaderCellDef>Estatus</th>
-          <td mat-cell *matCellDef="let element">{{element.idEstatus}} </td>
-        </ng-container>
-        <ng-container matColumnDef="idPerfil">
-          <th mat-header-cell *matHeaderCellDef>perfil</th>
-          <td mat-cell *matCellDef="let element">{{element.idPerfil}} </td>
-        </ng-container>
-        <ng-container matColumnDef="folio">
-          <th mat-header-cell *matHeaderCellDef>folio</th>
-          <td mat-cell *matCellDef="let element">{{element.folio}} </td>
-        </ng-container>
-        <ng-container matColumnDef="opciones">
-          <th mat-header-cell *matHeaderCellDef>Opciones</th>
-          <td mat-cell *matCellDef="let element">
-            <a [routerLink]="['editar-usuario' , element.idUsuario]"  class="btn btn-success mx-1"><i class="fas fa-edit"></i></a>
-            <a [routerLink]="['detalle-usuario' , element.idUsuario]" class="btn btn-success mx-1"><i class="fa-solid fa-circle-info"></i></a>
-            <a class="btn btn-danger mx-1"><i class="fa-solid fa-trash"></i></a>
-          </td>
+		<div class="col-12 justify-content-end d-flex">
+			<a role="button" [routerLink]="['alta-usuarios']" class="btn btn-success mx-4">Agregar <i
+				class="fa-solid fa-plus"></i></a>
 
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayColumns">
+			<a role="button" [routerLink]="['grafica-usuarios']" class="btn btn-success mx-4">Grafica<i
+				class="fa-solid fa-chart-pie"></i></a>
+		</div>
+		<div class="col-12">
+			<mat-card>
+				<form [formGroup]="formFilters">
+					<div class="row ">
+						<div class="col mx-1 pt-2">
+							<mat-form-field>
+								<mat-label>
+									Nombre
+								</mat-label>
+								<input formControlName="nombre" (change)="onFilterChange()" matInput type="text">
+								<mat-icon matSuffix (click)="cleanFilter('nombre')">close</mat-icon>
+							</mat-form-field>
+						</div>
+						<div class="col mx-1 pt-2">
+							<mat-form-field>
+								<mat-label>
+									Paterno
+								</mat-label>
+								<input formControlName="paterno" (change)="onFilterChange()" type="text" matInput>
+								<mat-icon matSuffix (click)="cleanFilter('paterno')">close</mat-icon>
+							</mat-form-field>
+						</div>
+						<div class="col mx-1 pt-2">
+							<mat-form-field>
+								<mat-label>
+									Materno
+								</mat-label>
+								<input matInput type="text" matInput formControlName="materno"
+									   (change)="onFilterChange()">
+								<mat-icon matSuffix (click)="cleanFilter('materno')"> close</mat-icon>
+							</mat-form-field>
+						</div>
+						<div class="col mx-1 pt-2">
+							<mat-form-field>
+								<mat-label>
+									Estatus
+								</mat-label>
+								<input matInput type="text" formControlName="estatus" (change)="onFilterChange()">
+								<mat-icon matSuffix (click)="cleanFilter('estatus')"> close</mat-icon>
+							</mat-form-field>
+						</div>
+						<div class="col mx-1 pt-2">
+							<mat-form-field>
+								<mat-label>
+									Perfil
+								</mat-label>
+								<input type="text" matInput formControlName="perfil" (change)="onFilterChange()">
+								<mat-icon matSuffix (click)="cleanFilter('perfil')"> close</mat-icon>
+							</mat-form-field>
+						</div>
 
-        </tr>
-        <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
-      </table>
-      <mat-paginator #paginator [length]="length" [pageIndex]="currentPage" [pageSize]="pageSize"
-                     showFirstLastButtons
-                     (page)="pageChenged($event)" [pageSizeOptions]="pageSizeOptions"
-                     aria-label="Select page"></mat-paginator>
-    </div>
-  </div>
+					</div>
+					<div class="row">
+						<div class="col mx-1 pt-2">
+							<mat-form-field>
+								<mat-label>
+									Folio
+								</mat-label>
+								<input type="text" matInput formControlName="folio" (change)="onFilterChange()">
+								<mat-icon matSuffix (click)="cleanFilter('folio')"> close</mat-icon>
+							</mat-form-field>
+						</div>
+						<div class="col mx-1 pt-2">
+							<mat-form-field>
+								<mat-label>
+									Asentamiento
+								</mat-label>
+								<input type="text" matInput formControlName="asentamiento" (change)="onFilterChange()">
+								<mat-icon matSuffix (click)="cleanFilter('asentamiento')"> close</mat-icon>
+							</mat-form-field>
+						</div>
+						<div class="col mx-1 pt-2">
+							<mat-form-field>
+								<mat-label>
+									Codigo Postal
+								</mat-label>
+								<input type="text" matInput formControlName="codigoPostal" (change)="onFilterChange()">
+								<mat-icon matSuffix (click)="cleanFilter('codigoPostal')"> close</mat-icon>
+							</mat-form-field>
+						</div>
+						<div class="col mx-1 pt-2">
+							<mat-form-field>
+								<mat-label>
+									Municipio
+								</mat-label>
+								<input type="text" matInput formControlName="municipio" (change)="onFilterChange()">
+								<mat-icon matSuffix (click)="cleanFilter('municipio')"> close</mat-icon>
+							</mat-form-field>
+						</div>
+						<div class="col mx-1 pt-2">
+							<mat-form-field>
+								<mat-label>
+									Estado
+								</mat-label>
+								<input type="text" matInput formControlName="estado" (change)="onFilterChange()">
+								<mat-icon matSuffix (click)="cleanFilter('estado')"> close</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</form>
+			</mat-card>
+			<mat-card>
+				<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+				<table mat-table matSort (matSortChange)="sortEvent($event)" [dataSource]="dataSource">
+					<ng-container matColumnDef="nombre">
+						<th mat-header-cell
+							class="mat-th-header"
+							mat-sort-header="nombre"
+							*matHeaderCellDef>
+							Nombre
+						</th>
+						<td mat-cell *matCellDef="let element ">{{element.nombre}} </td>
+					</ng-container>
+					<ng-container matColumnDef="aPaterno">
+						<th mat-header-cell
+							class="mat-th-header"
+							mat-sort-header="paterno"
+							*matHeaderCellDef>Paterno
+						</th>
+						<td mat-cell *matCellDef="let element">{{element.aPaterno}} </td>
+					</ng-container>
+					<ng-container
+
+						matColumnDef="aMaterno">
+						<th mat-sort-header="materno"
+							class="mat-th-header"
+							mat-header-cell
+							*matHeaderCellDef>Materno
+						</th>
+						<td mat-cell *matCellDef="let element">{{element.aMaterno}} </td>
+					</ng-container>
+					<ng-container
+
+						matColumnDef="idEstatus">
+						<th mat-header-cell
+							class="mat-th-header"
+							mat-sort-header="estatus" *matHeaderCellDef>Estatus
+						</th>
+						<td mat-cell *matCellDef="let element">{{element.idEstatus}} </td>
+					</ng-container>
+					<ng-container
+
+						matColumnDef="idPerfil">
+						<th mat-header-cell
+							class="mat-th-header"
+							mat-sort-header="perfil"
+							*matHeaderCellDef>perfil
+						</th>
+						<td mat-cell *matCellDef="let element">{{element.idPerfil}} </td>
+					</ng-container>
+					<ng-container matColumnDef="indActivo">
+						<th mat-header-cell
+							class="mat-th-header"
+							*matHeaderCellDef>Activo
+						</th>
+						<td mat-cell *matCellDef="let element">
+							<mat-slide-toggle (change)="disableAndEnableUsuario(element)"
+											  [(ngModel)]="element.indActivo"></mat-slide-toggle>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="folio">
+						<th mat-header-cell
+							class="mat-th-header"
+							mat-sort-header="folio"
+							*matHeaderCellDef>folio
+						</th>
+						<td mat-cell *matCellDef="let element">{{element.folio}} </td>
+					</ng-container>
+					<ng-container matColumnDef="asentamiento">
+						<th mat-header-cell
+							class="mat-th-header"
+							mat-sort-header="asentamiento"
+							*matHeaderCellDef>
+							Asentamiento
+						</th>
+						<td mat-cell *matCellDef="let element">
+							{{element.asentamiento}}
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="codigoPostal">
+						<th mat-header-cell
+							class="mat-th-header"
+							mat-sort-header="codigoPostal"
+							*matHeaderCellDef>
+							Código Postal
+						</th>
+						<td mat-cell *matCellDef="let element">
+							{{element.codigoPostal}}
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="municipio">
+						<th mat-header-cell
+							mat-sort-header="municipio"
+							class="mat-th-header"
+							*matHeaderCellDef>
+							Municipio
+						</th>
+						<td mat-cell *matCellDef="let element">
+							{{element.municipio}}
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="estado">
+						<th mat-header-cell
+							mat-sort-header="estado"
+							class="mat-th-header"
+							*matHeaderCellDef>
+							Estado
+						</th>
+						<td mat-cell *matCellDef="let element">
+							{{element.estado}}
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="opciones">
+						<th mat-header-cell
+							class="mat-th-header"
+							*matHeaderCellDef>Opciones
+						</th>
+						<td mat-cell *matCellDef="let element">
+							<a [routerLink]="['editar-usuario' , element.idUsuario]" class="btn btn-success mx-1"><i
+								class="fas fa-edit"></i></a>
+							<a [routerLink]="['detalle-usuario' , element.idUsuario]" class="btn btn-success mx-1"><i
+								class="fa-solid fa-circle-info"></i></a>
+							<a (click)="eliminarUsuario(element)" class="btn btn-danger mx-1"><i
+								class="fa-solid fa-trash"></i></a>
+						</td>
+
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayColumns">
+					</tr>
+					<tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+				</table>
+				<mat-paginator #paginator [length]="length" [pageIndex]="currentPage" [pageSize]="pageSize"
+							   showFirstLastButtons
+							   (page)="pageChenged($event)" [pageSizeOptions]="pageSizeOptions"
+							   aria-label="Select page"></mat-paginator>
+			</mat-card>
+		</div>
+	</div>
 </div>
 

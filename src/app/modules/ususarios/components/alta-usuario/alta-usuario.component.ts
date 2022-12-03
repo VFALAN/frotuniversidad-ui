@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
 import {ComboDTO} from "../../../../model/combo-dto";
 import {CatalogoEstadosService} from "../../../../services/catalogo-estados.service";
 import {UsuarioService} from "../../services/usuario.service";
@@ -7,11 +7,13 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 import {CATALOGO_ESTATUS, CATALOGO_GENERO, CATALOGO_PERFILES} from "../../../../utils/Catalogos";
 import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 import * as moment from "moment";
-import {map, Observable, startWith} from "rxjs";
+import {map, Observable, startWith, Subject} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
 import Validation from "../../../../utils/Validation";
 import Swal from 'sweetalert2'
 import {UsuarioDTO} from "../../model/usuario-dto";
+import {WebcamImage, WebcamInitError} from "ngx-webcam";
+import {baseUrlDataToFile} from "../../../../utils/FileUtils";
 
 @Component({
 	selector: 'app-alta-usuario',
@@ -19,6 +21,10 @@ import {UsuarioDTO} from "../../model/usuario-dto";
 	styleUrls: ['./alta-usuario.component.sass']
 })
 export class AltaUsuarioComponent implements OnInit {
+	@ViewChild('btnCloseModal', {static: false})
+	bntCloseModal !: ElementRef;
+	hasCamera: boolean = false;
+
 	isLoading = false;
 	startDate = new Date(1970, 0, 1);
 	hidePassword = false;
@@ -35,8 +41,59 @@ export class AltaUsuarioComponent implements OnInit {
 	catalogoPerfil: ComboDTO[] = CATALOGO_PERFILES;
 	catalogoEstaus: ComboDTO[] = CATALOGO_ESTATUS;
 	form !: FormGroup;
+	showCamera: boolean = false;
+	trigger: Subject<void> = new Subject();
+	webcamImage!: WebcamImage;
+	nextWebcam: Subject<void> = new Subject();
+	captureImage = ''
+
+	public triggerSnapshot(): void {
+
+		this.trigger.next();
+
+	}
+
+	public handleImage(webcamImage: WebcamImage): void {
+		const fechaStr = moment(new Date()).format('yyyy-MM-dd');
+		const titulo = 'FOTOGRAFIA_REGISTRO'
+		this.webcamImage = webcamImage;
+		Swal.fire({
+			title: 'Desea Usar Esta Fotografia',
+			imageUrl: webcamImage.imageAsDataUrl,
+			showCancelButton: true,
+			confirmButtonText: 'Si, Guardar',
+			cancelButtonText: 'Tomar Otra Foto'
+		}).then((res) => {
+			if (res.isConfirmed) {
+				this.captureImage = webcamImage!.imageAsDataUrl.split(',')[1];
+				const blob = new Blob([this.captureImage], {type: 'image/png'});
+				const file = baseUrlDataToFile(webcamImage.imageAsDataUrl, `${titulo}_${fechaStr}.png`, 'image/png');
+				this.form.controls['fotografiaRegsitro'].setValue(file);
+				this.showCamera = false;
+				this.bntCloseModal.nativeElement.click();
+			} else {
+				this.showCamera = true;
+
+			}
+		})
+
+
+	}
+
+	public get triggerObservable(): Observable<any> {
+
+		return this.trigger.asObservable();
+
+	}
+
+	public get nextWebcamObservable(): Observable<any> {
+
+		return this.nextWebcam.asObservable();
+
+	}
 
 	constructor(private route: ActivatedRoute,
+				private router: Router,
 				private catalogoService: CatalogoEstadosService,
 				private usuarioService: UsuarioService,
 				private fb: FormBuilder) {
@@ -88,7 +145,10 @@ export class AltaUsuarioComponent implements OnInit {
 				desFachada: [null, Validators.required],
 				numeroInterior: [null, Validators.required],
 				numeroExterior: [null, Validators.required],
-				file: [null, Validators.required]
+				fotografiaRegsitro: [null, Validators.required],
+				actaDeNacimiento: [null, Validators.required],
+				curpArchivo: [null, Validators.required],
+				comprobanteDomicilio: [null, Validators.required]
 			}, {
 
 				validators: [Validation.match('password', 'passwordComfirm')]
@@ -154,10 +214,12 @@ export class AltaUsuarioComponent implements OnInit {
 	}
 
 	guardar() {
-		const file:File = this.form.controls['file'].value;
-		console.log(file);
+		const fotoRegistro: File = this.form.controls['fotografiaRegsitro'].value;
+		const curp: File = this.form.controls['curpArchivo'].value;
+		const comprobante: File = this.form.controls['comprobanteDomicilio'].value;
+		const actaNacimineto: File = this.form.controls['actaDeNacimiento'].value;
 		if (this.form.valid) {
-			const formData:UsuarioDTO = this.form.getRawValue();
+			const formData: UsuarioDTO = this.form.getRawValue();
 			this.isLoading = true
 			this.usuarioService.validarUsuario(formData.nombreUsuario, formData.correo).subscribe(
 				(response: any) => {
@@ -167,18 +229,26 @@ export class AltaUsuarioComponent implements OnInit {
 						this.form.controls['correo'].setErrors({'emailAvalibleError': null})
 						this.form.controls['nombreUsuario'].setErrors({'usernameAvalibleError': null})
 						this.isLoading = true
-						this.usuarioService.guardar(formData,file).subscribe(
+						this.usuarioService.guardar(formData, fotoRegistro, curp, actaNacimineto, comprobante).subscribe(
 							(response: any) => {
 								Swal.fire({
 									title: 'USUARIO GUARDADO',
 									text: 'El Usuario se Dio de alta Correotamente',
-									icon: 'success'
+									icon: 'success',
+									confirmButtonText: 'Capturar Nuevo Usuario',
+									showCancelButton: true,
+									cancelButtonText: 'Salir'
+								}).then(res => {
+									if (res.isConfirmed) {
+										this.form.reset();
+									} else {
+										this.router.navigate(['../'], {relativeTo: this.route});
+									}
 								})
 							}, (error: HttpErrorResponse) => {
 								Swal.fire({
-									title: 'USUARIO GUARDADO',
-									text: error.message
-									,
+									title: 'ERROR',
+									text: error.message,
 									icon: 'error'
 								})
 							}, () => {
@@ -196,6 +266,11 @@ export class AltaUsuarioComponent implements OnInit {
 						}
 					}
 				}, (error: HttpErrorResponse) => {
+					Swal.fire({
+						title: 'ERROR',
+						icon: 'error',
+						text: error.message
+					})
 					console.log(error.message)
 				}, () => this.isLoading = false)
 		}
@@ -203,7 +278,6 @@ export class AltaUsuarioComponent implements OnInit {
 
 	onGeneroChange() {
 		const genero = this.form.controls['genero'].value;
-		console.log(genero)
 		switch (genero) {
 			case '3' :
 				this.form.controls['desGenero'].addValidators(Validators.required);
@@ -253,5 +327,14 @@ export class AltaUsuarioComponent implements OnInit {
 
 	get f(): { [key: string]: AbstractControl } {
 		return this.form.controls;
+	}
+
+	handlerInitError(error: WebcamInitError) {
+		if (error.mediaStreamError && error.mediaStreamError.name === "NotAllowedError") {
+			this.hasCamera = false
+			console.warn("Camera access was not allowed by user!");
+		} else {
+			this.hasCamera = true;
+		}
 	}
 }

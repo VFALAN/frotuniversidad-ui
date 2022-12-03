@@ -17,10 +17,26 @@ export class UsuarioService extends BaseService<any, any, UsuarioTableDTO> {
 
 	}
 
-	guardar(usuario: UsuarioDTO, fotografia: File) {
+	buscarPorFiltros(page: any, size: any, column: string = '', order: string = '', filters: string = '') {
+		const opt = {
+			params: {
+				page,
+				size,
+				column,
+				order,
+				filters
+			}
+		}
+		return this._http.get<any>(this._base, opt);
+	}
+
+	guardar(usuario: UsuarioDTO, fotografia: File, curp: File, actaNacimineto: File, comprobanteDomicilio: File) {
 		const formData = new FormData();
 		formData.append('usuario', JSON.stringify(usuario));
-		formData.append('file', fotografia);
+		formData.append('fotografia', fotografia);
+		formData.append('curp', curp);
+		formData.append('comprobante', comprobanteDomicilio);
+		formData.append('actaNacimiento', actaNacimineto);
 		return this._http.post<any>(this._base, formData);
 	}
 
@@ -32,6 +48,15 @@ export class UsuarioService extends BaseService<any, any, UsuarioTableDTO> {
 			}
 		}
 		return this._http.get<any>(`${this._base}/validarUsuario`, opt)
+	}
+
+	disableOrEnable(idUsuario: any) {
+		const opt = {
+			params: {
+				idUsuario
+			}
+		}
+		return this._http.put<number>(`${this._base}/disabled`, null, opt);
 	}
 
 

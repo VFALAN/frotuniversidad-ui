@@ -1,22 +1,28 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-12">
-			<app-menu></app-menu>
+	<div class="flex-row">
+		<div class="mx-2 pt-2 col-12">
+			<app-menu routerLink="../">
+				<i class="fa-solid fa-square-left"></i>
+			</app-menu>
+		</div>
+		<div class="mx-2 pt-2 col-12 d-flex justify-content-start">
+			<button [routerLink]="'../'" class="btn btn-success">
+				Regresar <i class="fa-solid fa-square-left"></i>
+			</button>
 		</div>
 	</div>
 	<mat-card class="pt-2">
 		<form [formGroup]="form">
 			<mat-card class="pt-2">
-				<div class="row d-flex">
-					<div class="col-12 d-flex justify-content-start">
+				<div class="flex-row d-flex">
+					<div class="mx-2 pt-2 col-12 d-flex justify-content-start">
 						<h1 class="h6">
 							Informacion Personal
 						</h1>
-
 					</div>
 				</div>
-				<div class="row d-flex pt-2 mx-2">
-					<div class="col-3 d-flex justify-content-center ">
+				<div class="flex-row d-flex pt-2 mx-2">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center ">
 						<mat-form-field>
 							<mat-label>Nombre</mat-label>
 							<input formControlName="nombre"
@@ -28,7 +34,7 @@
 						</mat-form-field>
 
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Apellido Paterno</mat-label>
 							<input formControlName="apellidoPaterno"
@@ -41,7 +47,7 @@
 						</mat-form-field>
 
 					</div>
-					<div class="col-3 d-flex  justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex  justify-content-center">
 						<mat-form-field>
 							<mat-label>Apellido Materno</mat-label>
 							<input matInput
@@ -54,7 +60,7 @@
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Fecha De Nacimiento</mat-label>
 							<input
@@ -75,14 +81,14 @@
 						</mat-form-field>
 					</div>
 				</div>
-				<div class="row pt-2 mx-2 d-flex">
-					<div class="col-3 d-flex justify-content-center">
+				<div class="flex-row pt-2 mx-2 d-flex">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Edad</mat-label>
 							<input matInput formControlName="edad" type="text">
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Curp</mat-label>
 							<input matInput
@@ -94,7 +100,7 @@
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Genero</mat-label>
 							<mat-select (selectionChange)="onGeneroChange()" formControlName="genero">
@@ -108,7 +114,7 @@
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Descripcion Genero</mat-label>
 							<input matInput
@@ -124,15 +130,15 @@
 				</div>
 			</mat-card>
 			<mat-card class="pt-2">
-				<div class="row d-flex">
-					<div class="col-12 d-flex justify-content-start">
+				<div class="flex-row d-flex">
+					<div class="mx-2 pt-2 col-12 d-flex justify-content-start">
 						<h1 class="h6">
 							Direccion
 						</h1>
 					</div>
 				</div>
-				<div class="row d-flex">
-					<div class="col-3 d-flex justify-content-center">
+				<div class="flex-row d-flex">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Estado</mat-label>
 							<input matInput
@@ -151,7 +157,7 @@
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Municipio</mat-label>
 							<input matInput
@@ -170,7 +176,7 @@
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Asentamiento</mat-label>
 							<input matInput
@@ -189,7 +195,7 @@
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label> Calle</mat-label>
 							<input formControlName="calle" matInput>
@@ -200,8 +206,8 @@
 						</mat-form-field>
 					</div>
 				</div>
-				<div class="row d-flex">
-					<div class="col-3 d-flex justify-content-center">
+				<div class="flex-row d-flex">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Numero Exterior</mat-label>
 							<input matInput type="text" formControlName="numeroExterior">
@@ -211,7 +217,7 @@
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Numero Interior</mat-label>
 							<input matInput type="text" formControlName="numeroInterior"></mat-form-field>
@@ -221,7 +227,7 @@
 						</mat-error>
 					</div>
 
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Fachada</mat-label>
 							<input matInput formControlName="desFachada" type="text"></mat-form-field>
@@ -233,15 +239,15 @@
 				</div>
 			</mat-card>
 			<mat-card class="pt-2">
-				<div class="row d-flex">
-					<div class="col-12 d-flex justify-content-start">
+				<div class="flex-row d-flex">
+					<div class="mx-2 pt-2 col-12 d-flex justify-content-start">
 						<h1 class="h6">
 							Usuario
 						</h1>
 					</div>
 				</div>
-				<div class="row d-flex">
-					<div class="col-3 d-flex justify-content-center">
+				<div class="flex-row d-flex">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Nombre de usuario</mat-label>
 							<input formControlName="nombreUsuario" matInput type="text">
@@ -255,7 +261,7 @@
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Correo</mat-label>
 							<input matInput formControlName="correo" type="text">
@@ -273,7 +279,7 @@
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Contraseña</mat-label>
 							<input formControlName="password" matInput [type]="hidePassword ? 'password' : 'text'">
@@ -307,7 +313,7 @@
 						</mat-form-field>
 
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label> confirmar Contraseña</mat-label>
 							<input matInput formControlName="passwordComfirm"
@@ -326,8 +332,8 @@
 						</mat-form-field>
 					</div>
 				</div>
-				<div class="row d-flex">
-					<div class="col-3 d-flex justify-content-center">
+				<div class="flex-row d-flex">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Perfil</mat-label>
 							<mat-select formControlName="idPerfil">
@@ -341,7 +347,7 @@
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Estatus</mat-label>
 							<mat-select formControlName="idEstatus">
@@ -355,16 +361,17 @@
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Folio</mat-label>
 							<input matInput formControlName="folio" type="text">
-							<mat-error *ngIf="f['folio'].hasError('required') && (f['folio'].touched || f['folio'].dirty)">
+							<mat-error
+								*ngIf="f['folio'].hasError('required') && (f['folio'].touched || f['folio'].dirty)">
 								*Campo Requerido
 							</mat-error>
 						</mat-form-field>
 					</div>
-					<div class="col-3 d-flex justify-content-center">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
 						<mat-form-field>
 							<mat-label>Matricula</mat-label>
 							<input matInput formControlName="matricula" type="text">
@@ -375,35 +382,119 @@
 						</mat-form-field>
 					</div>
 				</div>
-				<div class="row d-flex">
-					<div class="col-3 d-flex justify-content-center">
+				<div class="flex-row d-flex justify-content-start pt-2 mx-2">
+					<div class="mx-2 pt-2 col-3 d-flex justify-content-center">
+
+					</div>
+					<div class="mx-2 pt-2 col-1 d-flex justify-content-center ">
+
+					</div>
+				</div>
+
+			</mat-card>
+			<mat-card>
+				<mat-card-header>
+					<mat-card-title>
+						Carga de documentos
+					</mat-card-title>
+				</mat-card-header>
+				<div class="flex-row d-flex pt-2">
+					<div class="mx-2 pt-2 col-3">
 						<mat-form-field>
 							<mat-label>
 								Fotografia
 							</mat-label>
 							<ngx-mat-file-input
 								accept=".png, .jpg, .jpeg"
-								[multiple]="false" formControlName="file">
+								[multiple]="false" formControlName="fotografiaRegsitro">
+
+							</ngx-mat-file-input>
+
+							<mat-error
+								*ngIf="f['fotografiaRegsitro'].hasError('required') && (f['fotografiaRegsitro'].touched || f['fotografiaRegsitro'].dirty)">
+								*Campo Requerido
+							</mat-error>
+						</mat-form-field>
+						<button class="btn btn-success mx-2" (click)="showCamera=true" data-bs-toggle="modal"
+								data-bs-target="#exampleModal">
+							<i class="fa-solid fa-camera"></i>
+						</button>
+					</div>
+					<div class="mx-2 pt-2 col-3">
+						<mat-form-field>
+							<mat-label>Curp</mat-label>
+							<ngx-mat-file-input formControlName="curpArchivo" [multiple]="false"
+												accept=".png,.jpg,.jpeg,.pdf">
 
 							</ngx-mat-file-input>
 							<mat-error
-								*ngIf="f['file'].hasError('required') && (f['file'].touched || f['file'].dirty)">
-								*Campo Requerido
+								*ngIf="f['curpArchivo'].hasError('required') && (f['curpArchivo'].touched || f['curpArchivo'].dirty)">
+								Campo Requerido
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="mx-2 pt-2 col-3">
+						<mat-form-field>
+							<mat-label>Acta de nacimineto</mat-label>
+							<ngx-mat-file-input formControlName="actaDeNacimiento"></ngx-mat-file-input>
+							<mat-error
+								*ngIf="f['actaDeNacimiento'].hasError('required') && (f['actaDeNacimiento'].touched || f['actaDeNacimiento'].dirty)">
+								Campo Requerido
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="mx-2 pt-2 col-3">
+						<mat-form-field>
+							<mat-label>Comprobante de domicilio</mat-label>
+							<ngx-mat-file-input
+								formControlName="comprobanteDomicilio"
+							></ngx-mat-file-input>
+							<mat-error
+								*ngIf="f['comprobanteDomicilio'].hasError('required') && (f['comprobanteDomicilio'].touched || f['comprobanteDomicilio'].dirty)">
+								Campo Requerido
 							</mat-error>
 						</mat-form-field>
 					</div>
 				</div>
-
 			</mat-card>
-			<div class="row d-flex justify-content-start pt-2 mx-2">
-				<div class="col-1 d-flex justify-content-center">
+			<div class="flex-row d-flex justify-content-start pt-2 mx-2">
+				<div class="mx-2 pt-2 col-1 d-flex justify-content-center">
 					<button (click)="guardar()"
 							[disabled]="!form.valid"
-							class="btn btn-success">Guardar<i class="fa-sharp fa-solid fa-floppy-disk"></i></button>
+							class="btn btn-success">Guardar <i class="fa-sharp fa-solid fa-floppy-disk"></i></button>
 				</div>
 			</div>
 		</form>
 	</mat-card>
-
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Captura de fotografía </h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="justify-content-center">
+					<webcam *ngIf="showCamera"
+							[width]="480"
+							[trigger]="trigger"
+							(imageCapture)="handleImage($event)"
+							(initError)="handlerInitError($event)"></webcam>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button #btnCloseModal type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+						(click)="showCamera=false">Cancelar
+				</button>
+				<button type="button" (click)="triggerSnapshot()" class="btn btn-primary">Capturar</button>
+			</div>
+		</div>
+	</div>
+</div>
+

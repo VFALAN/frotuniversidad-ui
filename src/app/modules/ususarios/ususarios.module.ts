@@ -28,6 +28,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {GeneralComponentsModule} from "../general-components/general-components.module";
 import {MatSortModule} from "@angular/material/sort";
 import { NgxMatFileInputModule} from "@angular-material-components/file-input";
+import {WebcamModule} from "ngx-webcam";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 
 @NgModule({
@@ -60,7 +62,9 @@ import { NgxMatFileInputModule} from "@angular-material-components/file-input";
         MatIconModule,
         GeneralComponentsModule,
         MatSortModule,
-		NgxMatFileInputModule
+        NgxMatFileInputModule,
+        WebcamModule,
+        MatSlideToggleModule
     ],
   providers : [
     UsuarioService,
