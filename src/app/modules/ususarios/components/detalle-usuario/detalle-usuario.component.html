@@ -1,1 +1,264 @@
-<p>detalle-usuario works!</p>
+<div class="container-fluid">
+	<div class="flex-row">
+		<div class=" px-2 col-12">
+			<app-menu>
+			</app-menu>
+		</div>
+		<div class=" pt-2 col-12 d-flex justify-content-start">
+			<div>
+				<button [routerLink]="'../'" class="btn btn-success">
+					<mat-icon>arrow_back</mat-icon>
+					regresar
+				</button>
+			</div>
+		</div>
+	</div>
+	<mat-card>
+		<form [formGroup]="form">
+			<mat-card class="pt-2">
+				<mat-card-header>
+					<mat-card-title>Informacion Personal</mat-card-title>
+				</mat-card-header>
+
+				<mat-card-content>
+					<div class="flex-row d-flex pt-2 ">
+						<div class=" pt-2 col-3 d-flex justify-content-center ">
+							<mat-form-field>
+								<mat-label>Nombre</mat-label>
+								<input formControlName="nombre"
+									(change)="f['nombre'].setValue(f['nombre'].value.toUpperCase())"
+									placeholder="Ingresa Tu Nombre" matInput type="text">
+
+							</mat-form-field>
+
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Apellido Paterno</mat-label>
+								<input formControlName="apellidoPaterno"
+									(change)="f['apellidoPaterno'].setValue(f['apellidoPaterno'].value.toUpperCase())"
+									placeholder="Ingresa Tu Apellido Paterno" matInput type="text">
+
+							</mat-form-field>
+
+						</div>
+						<div class=" pt-2 col-3 d-flex  justify-content-center">
+							<mat-form-field>
+								<mat-label>Apellido Materno</mat-label>
+								<input matInput
+									(change)="f['apellidoMaterno'].setValue(f['apellidoMaterno'].value.toUpperCase())"
+									placeholder="Ingresa Tu Apellido" formControlName="apellidoMaterno" type="text">
+
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Fecha De Nacimiento</mat-label>
+								<input matInput formControlName="fechaNacimiento">
+
+
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="flex-row pt-2  d-flex">
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Edad</mat-label>
+								<input matInput formControlName="edad" type="text">
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Curp</mat-label>
+								<input matInput formControlName="curp" placeholder="Ingresa Tu CURP" type="text">
+
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Genero</mat-label>
+								<input type="text" matInput formControlName="genero">
+
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Descripcion Genero</mat-label>
+								<input matInput placeholder="Ingresa Tu Genero" formControlName="desGenero" type="text">
+
+							</mat-form-field>
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-card>
+			<mat-card class="pt-2">
+				<mat-card-header>
+					<mat-card-title>
+						Dirección
+					</mat-card-title>
+				</mat-card-header>
+				<mat-card-content>
+					<div class="flex-row d-flex">
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Estado</mat-label>
+								<input matInput formControlName="estado">
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Municipio</mat-label>
+								<input matInput formControlName="municipio">
+
+
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Asentamiento</mat-label>
+								<input matInput formControlName="asentamiento">
+
+
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label> Calle</mat-label>
+								<input formControlName="calle" matInput>
+
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="flex-row d-flex">
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Numero Exterior</mat-label>
+								<input matInput type="text" formControlName="numeroExterior">
+
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Numero Interior</mat-label>
+								<input matInput type="text" formControlName="numeroInterior"></mat-form-field>
+
+						</div>
+
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Fachada</mat-label>
+								<input matInput formControlName="desFachada" type="text"></mat-form-field>
+
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-card>
+			<mat-card class="pt-2">
+				<mat-card-header>
+					<mat-card-title>
+						Usuario
+					</mat-card-title>
+				</mat-card-header>
+				<div class="flex-row d-flex">
+					<div class=" pt-2 col-3 d-flex justify-content-center">
+						<mat-form-field>
+							<mat-label>Nombre de usuario</mat-label>
+							<input formControlName="nombreUsuario" matInput type="text">
+
+						</mat-form-field>
+					</div>
+					<div class=" pt-2 col-3 d-flex justify-content-center">
+						<mat-form-field>
+							<mat-label>Correo</mat-label>
+							<input matInput formControlName="correo" type="text">
+						</mat-form-field>
+					</div>
+
+				</div>
+				<div class="flex-row d-flex">
+					<div class=" pt-2 col-3 d-flex justify-content-center">
+						<mat-form-field>
+							<mat-label>Perfil</mat-label>
+
+							<input type="text" matInput formControlName="perfil">
+						</mat-form-field>
+					</div>
+					<div class=" pt-2 col-3 d-flex justify-content-center">
+						<mat-form-field>
+							<mat-label>Estatus</mat-label>
+							<input type="text" matInput formControlName="estatus">
+						</mat-form-field>
+					</div>
+					<div class=" pt-2 col-3 d-flex justify-content-center"
+						*ngIf="f['idPerfil'].value!=null&&f['idPerfil'].value != '1'">
+						<mat-form-field>
+							<mat-label>Plantel</mat-label>
+							<input matInput formControlName="plantel" type="text">
+
+						</mat-form-field>
+					</div>
+					<div class=" pt-2 col-3 d-flex justify-content-center"
+						*ngIf="(f['idPerfil'].value!=null) && (f['idPerfil'].value==2 ||f['idPerfil'].value==4)">
+						<mat-form-field>
+							<mat-label>Carrera</mat-label>
+							<input type="text" matInput formControlName="carrera">
+						</mat-form-field>
+					</div>
+				</div>
+
+
+			</mat-card>
+			<mat-card>
+				<mat-card-header>
+					<mat-card-title>
+						Carga de documentos
+					</mat-card-title>
+				</mat-card-header>
+				<div class="flex-row d-flex justify-content-center pt-2">
+					<div class="justify-content-center d-flex  pt-2 col-3">
+						<mat-form-field>
+							<mat-label>
+								Fotografia
+							</mat-label>
+							<ngx-mat-file-input accept=".png, .jpg, .jpeg" [multiple]="false"
+								formControlName="fotografiaRegsitro">
+
+							</ngx-mat-file-input>
+
+						</mat-form-field>
+
+					</div>
+					<div class="justify-content-center d-flex  pt-2 col-3">
+						<mat-form-field>
+							<mat-label>Curp</mat-label>
+							<ngx-mat-file-input formControlName="curpArchivo" [multiple]="false"
+								accept=".png,.jpg,.jpeg,.pdf">
+
+							</ngx-mat-file-input>
+
+						</mat-form-field>
+					</div>
+					<div class="justify-content-center d-flex  pt-2 col-3">
+						<mat-form-field>
+							<mat-label>Acta de nacimineto</mat-label>
+							<ngx-mat-file-input formControlName="actaDeNacimiento"></ngx-mat-file-input>
+
+						</mat-form-field>
+					</div>
+					<div class="justify-content-center d-flex  pt-2 col-3">
+						<mat-form-field>
+							<mat-label>Comprobante de domicilio</mat-label>
+							<ngx-mat-file-input formControlName="comprobanteDomicilio"></ngx-mat-file-input>
+
+						</mat-form-field>
+					</div>
+				</div>
+			</mat-card>
+			<div class="flex-row d-flex justify-content-start pt-2 ">
+				<div class=" pt-2 col-1 d-flex justify-content-center">
+					<button class="btn btn-success">Guardar <i class="fa-sharp fa-solid fa-floppy-disk"></i></button>
+				</div>
+			</div>
+		</form>
+	</mat-card>
+</div>

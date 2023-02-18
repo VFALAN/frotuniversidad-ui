@@ -1,1 +1,23 @@
-<p>ng-notification works!</p>
+<div>
+	<mat-icon [mat-menu-trigger-for]="menu" [matBadge]="notificaciones.length">
+		public
+	</mat-icon>
+	<mat-menu #menu="matMenu">
+		<mat-list>
+
+			<mat-list-item *ngFor="let notificacion of notificaciones">
+
+				<div matLine>{{notificacion.titulo}}</div>
+				<div matLine>{{notificacion.mensaje}}</div>
+				<div matLine>
+					{{diferenciaTiempo(notificacion.fechaAlta)}}
+				</div>
+				<button mat-icon-button>
+					<mat-icon>
+						more_vert
+					</mat-icon>
+				</button>
+			</mat-list-item>
+		</mat-list>
+	</mat-menu>
+</div>

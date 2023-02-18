@@ -30,6 +30,7 @@ import {MatSortModule} from "@angular/material/sort";
 import { NgxMatFileInputModule} from "@angular-material-components/file-input";
 import {WebcamModule} from "ngx-webcam";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatExpansionModule} from "@angular/material/expansion";
 
 
 @NgModule({
@@ -64,11 +65,13 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
         MatSortModule,
         NgxMatFileInputModule,
         WebcamModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        MatExpansionModule
     ],
   providers : [
     UsuarioService,
-    CatalogoEstadosService
+    CatalogoEstadosService,
+
   ]
 })
 export class UsusariosModule { }

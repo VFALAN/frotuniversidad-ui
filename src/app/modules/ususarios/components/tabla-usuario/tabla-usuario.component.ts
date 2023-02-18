@@ -7,11 +7,13 @@ import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import Swal from "sweetalert2";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {MatExpansionPanel} from "@angular/material/expansion";
 
 @Component({
 	selector: 'app-tabla-usuario',
 	templateUrl: './tabla-usuario.component.html',
-	styleUrls: ['./tabla-usuario.component.sass']
+	styleUrls: ['./tabla-usuario.component.sass'],
+	viewProviders : [MatExpansionPanel]
 })
 export class TablaUsuarioComponent implements OnInit, AfterViewInit {
 
@@ -31,7 +33,6 @@ export class TablaUsuarioComponent implements OnInit, AfterViewInit {
 		'idEstatus',
 		'indActivo',
 		'idPerfil',
-		'folio',
 		'asentamiento',
 		'codigoPostal',
 		'municipio',
@@ -47,6 +48,7 @@ export class TablaUsuarioComponent implements OnInit, AfterViewInit {
 	formFilters !: FormGroup;
 
 	ngOnInit(): void {
+
 		this.initForm();
 		this.loadData();
 	}
@@ -62,7 +64,6 @@ export class TablaUsuarioComponent implements OnInit, AfterViewInit {
 			asentamiento: [null],
 			codigoPostal: [null],
 			municipio: [null],
-			folio: [null]
 		})
 	}
 

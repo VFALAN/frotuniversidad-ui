@@ -1,5 +1,4 @@
 <div class="container-fluid">
-	<app-ng-notification></app-ng-notification>
 	<div class="row d-flex">
 		<div class="col-12">
 			<app-menu></app-menu>
@@ -18,106 +17,110 @@
 				class="fa-solid fa-chart-pie"></i></a>
 		</div>
 		<div class="col-12">
-			<mat-card>
-				<form [formGroup]="formFilters">
-					<div class="row ">
-						<div class="col mx-1 pt-2">
-							<mat-form-field>
-								<mat-label>
-									Nombre
-								</mat-label>
-								<input formControlName="nombre" (change)="onFilterChange()" matInput type="text">
-								<mat-icon matSuffix (click)="cleanFilter('nombre')">close</mat-icon>
-							</mat-form-field>
-						</div>
-						<div class="col mx-1 pt-2">
-							<mat-form-field>
-								<mat-label>
-									Paterno
-								</mat-label>
-								<input formControlName="paterno" (change)="onFilterChange()" type="text" matInput>
-								<mat-icon matSuffix (click)="cleanFilter('paterno')">close</mat-icon>
-							</mat-form-field>
-						</div>
-						<div class="col mx-1 pt-2">
-							<mat-form-field>
-								<mat-label>
-									Materno
-								</mat-label>
-								<input matInput type="text" matInput formControlName="materno"
-									   (change)="onFilterChange()">
-								<mat-icon matSuffix (click)="cleanFilter('materno')"> close</mat-icon>
-							</mat-form-field>
-						</div>
-						<div class="col mx-1 pt-2">
-							<mat-form-field>
-								<mat-label>
-									Estatus
-								</mat-label>
-								<input matInput type="text" formControlName="estatus" (change)="onFilterChange()">
-								<mat-icon matSuffix (click)="cleanFilter('estatus')"> close</mat-icon>
-							</mat-form-field>
-						</div>
-						<div class="col mx-1 pt-2">
-							<mat-form-field>
-								<mat-label>
-									Perfil
-								</mat-label>
-								<input type="text" matInput formControlName="perfil" (change)="onFilterChange()">
-								<mat-icon matSuffix (click)="cleanFilter('perfil')"> close</mat-icon>
-							</mat-form-field>
-						</div>
+			<mat-accordion class="acordion-filtros">
+				<mat-expansion-panel>
+					<mat-expansion-panel-header>
+						<mat-panel-title>Filtros de busqueda</mat-panel-title>
+						<mat-panel-description>
+						<mat-icon></mat-icon>
+							<mat-icon>filter_list</mat-icon>
+						</mat-panel-description>
+					</mat-expansion-panel-header>
+					<mat-card>
+						<form [formGroup]="formFilters">
+							<div class="row ">
+								<div class="col mx-1 pt-2">
+									<mat-form-field>
+										<mat-label>
+											Nombre
+										</mat-label>
+										<input formControlName="nombre" (change)="onFilterChange()" matInput type="text">
+										<mat-icon matSuffix (click)="cleanFilter('nombre')">close</mat-icon>
+									</mat-form-field>
+								</div>
+								<div class="col mx-1 pt-2">
+									<mat-form-field>
+										<mat-label>
+											Paterno
+										</mat-label>
+										<input formControlName="paterno" (change)="onFilterChange()" type="text" matInput>
+										<mat-icon matSuffix (click)="cleanFilter('paterno')">close</mat-icon>
+									</mat-form-field>
+								</div>
+								<div class="col mx-1 pt-2">
+									<mat-form-field>
+										<mat-label>
+											Materno
+										</mat-label>
+										<input matInput type="text" matInput formControlName="materno"
+											   (change)="onFilterChange()">
+										<mat-icon matSuffix (click)="cleanFilter('materno')"> close</mat-icon>
+									</mat-form-field>
+								</div>
+								<div class="col mx-1 pt-2">
+									<mat-form-field>
+										<mat-label>
+											Estatus
+										</mat-label>
+										<input matInput type="text" formControlName="estatus" (change)="onFilterChange()">
+										<mat-icon matSuffix (click)="cleanFilter('estatus')"> close</mat-icon>
+									</mat-form-field>
+								</div>
+								<div class="col mx-1 pt-2">
+									<mat-form-field>
+										<mat-label>
+											Perfil
+										</mat-label>
+										<input type="text" matInput formControlName="perfil" (change)="onFilterChange()">
+										<mat-icon matSuffix (click)="cleanFilter('perfil')"> close</mat-icon>
+									</mat-form-field>
+								</div>
 
-					</div>
-					<div class="row">
-						<div class="col mx-1 pt-2">
-							<mat-form-field>
-								<mat-label>
-									Folio
-								</mat-label>
-								<input type="text" matInput formControlName="folio" (change)="onFilterChange()">
-								<mat-icon matSuffix (click)="cleanFilter('folio')"> close</mat-icon>
-							</mat-form-field>
-						</div>
-						<div class="col mx-1 pt-2">
-							<mat-form-field>
-								<mat-label>
-									Asentamiento
-								</mat-label>
-								<input type="text" matInput formControlName="asentamiento" (change)="onFilterChange()">
-								<mat-icon matSuffix (click)="cleanFilter('asentamiento')"> close</mat-icon>
-							</mat-form-field>
-						</div>
-						<div class="col mx-1 pt-2">
-							<mat-form-field>
-								<mat-label>
-									Codigo Postal
-								</mat-label>
-								<input type="text" matInput formControlName="codigoPostal" (change)="onFilterChange()">
-								<mat-icon matSuffix (click)="cleanFilter('codigoPostal')"> close</mat-icon>
-							</mat-form-field>
-						</div>
-						<div class="col mx-1 pt-2">
-							<mat-form-field>
-								<mat-label>
-									Municipio
-								</mat-label>
-								<input type="text" matInput formControlName="municipio" (change)="onFilterChange()">
-								<mat-icon matSuffix (click)="cleanFilter('municipio')"> close</mat-icon>
-							</mat-form-field>
-						</div>
-						<div class="col mx-1 pt-2">
-							<mat-form-field>
-								<mat-label>
-									Estado
-								</mat-label>
-								<input type="text" matInput formControlName="estado" (change)="onFilterChange()">
-								<mat-icon matSuffix (click)="cleanFilter('estado')"> close</mat-icon>
-							</mat-form-field>
-						</div>
-					</div>
-				</form>
-			</mat-card>
+							</div>
+							<div class="row">
+								<div class="col mx-1 pt-2">
+									<mat-form-field>
+										<mat-label>
+											Asentamiento
+										</mat-label>
+										<input type="text" matInput formControlName="asentamiento" (change)="onFilterChange()">
+										<mat-icon matSuffix (click)="cleanFilter('asentamiento')"> close</mat-icon>
+									</mat-form-field>
+								</div>
+								<div class="col mx-1 pt-2">
+									<mat-form-field>
+										<mat-label>
+											Codigo Postal
+										</mat-label>
+										<input type="text" matInput formControlName="codigoPostal" (change)="onFilterChange()">
+										<mat-icon matSuffix (click)="cleanFilter('codigoPostal')"> close</mat-icon>
+									</mat-form-field>
+								</div>
+								<div class="col mx-1 pt-2">
+									<mat-form-field>
+										<mat-label>
+											Municipio
+										</mat-label>
+										<input type="text" matInput formControlName="municipio" (change)="onFilterChange()">
+										<mat-icon matSuffix (click)="cleanFilter('municipio')"> close</mat-icon>
+									</mat-form-field>
+								</div>
+								<div class="col mx-1 pt-2">
+									<mat-form-field>
+										<mat-label>
+											Estado
+										</mat-label>
+										<input type="text" matInput formControlName="estado" (change)="onFilterChange()">
+										<mat-icon matSuffix (click)="cleanFilter('estado')"> close</mat-icon>
+									</mat-form-field>
+								</div>
+							</div>
+						</form>
+					</mat-card>
+				</mat-expansion-panel>
+
+			</mat-accordion>
+
 			<mat-card>
 				<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
 				<table mat-table matSort (matSortChange)="sortEvent($event)" [dataSource]="dataSource">

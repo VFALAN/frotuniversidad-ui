@@ -26,9 +26,9 @@ export class AltaUsuarioComponent implements OnInit {
 	hasCamera: boolean = false;
 
 	isLoading = false;
-	startDate = new Date(1970, 0, 1);
-	hidePassword = false;
-	hideConfirmPasswod = false;
+	startDate = new Date(1980, 0, 1);
+	hidePassword = true;
+	hideConfirmPasswod = true;
 	isAvalibleCorreo: boolean = true;
 	isAvalibleNombreUsuario: boolean = true;
 	catalogoEstados: ComboDTO[] = [];
@@ -37,14 +37,18 @@ export class AltaUsuarioComponent implements OnInit {
 	filtredMunicipios!: Observable<ComboDTO[]>;
 	catalogoAsentamietno: ComboDTO[] = [];
 	filtredAsentaminetos!: Observable<ComboDTO[]>;
+	catalogoPlanteles: ComboDTO[] = [];
+	filtredPlanteles!: Observable<ComboDTO[]>;
 	catalogoGenero: ComboDTO[] = CATALOGO_GENERO;
 	catalogoPerfil: ComboDTO[] = CATALOGO_PERFILES;
 	catalogoEstaus: ComboDTO[] = CATALOGO_ESTATUS;
+	catalogoCarreras: ComboDTO[] = [];
 	form !: FormGroup;
 	showCamera: boolean = false;
 	trigger: Subject<void> = new Subject();
 	webcamImage!: WebcamImage;
 	nextWebcam: Subject<void> = new Subject();
+
 	captureImage = ''
 
 	public triggerSnapshot(): void {
@@ -100,7 +104,7 @@ export class AltaUsuarioComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.catalogoEstados = this.route.snapshot.data['respuesta'];
+		this.catalogoEstados = this.route.snapshot.data['data'];
 		this.initForm();
 	}
 
@@ -130,13 +134,11 @@ export class AltaUsuarioComponent implements OnInit {
 				idEstatus: [null, Validators.required],
 				idPerfil: [null, Validators.required],
 				idEstado: [null, Validators.required],
-				estado: [null],
+				estado: [null, Validators.required],
 				idMunicipio: [null, Validators.required],
-				municipio: [null],
+				municipio: [null, Validators.required],
 				idAsentamiento: [null, Validators.required],
-				asentamiento: [null],
-				folio: [null, Validators.required],
-				matricula: [null, Validators.required],
+				asentamiento: [null, Validators.required],
 				desGenero: [{value: null, disabled: true}, Validators.required],
 				genero: [null, Validators.required],
 				edad: [{value: null, disabled: true}, Validators.required],
@@ -148,7 +150,11 @@ export class AltaUsuarioComponent implements OnInit {
 				fotografiaRegsitro: [null, Validators.required],
 				actaDeNacimiento: [null, Validators.required],
 				curpArchivo: [null, Validators.required],
-				comprobanteDomicilio: [null, Validators.required]
+				comprobanteDomicilio: [null, Validators.required],
+				idPlantel: [null],
+				plantel: [null],
+				idCarrera: [null],
+				carrera: [null]
 			}, {
 
 				validators: [Validation.match('password', 'passwordComfirm')]
@@ -171,6 +177,28 @@ export class AltaUsuarioComponent implements OnInit {
 		this.form.controls['asentamiento'].setValue(asentamiento.label);
 	}
 
+	onPlantelChange(event: any) {
+		this.isLoading = true
+		const idPlantel = event.option.value;
+		const index = this.catalogoPlanteles.findIndex(p => {
+			return p.value == idPlantel
+		})
+		const plantel = this.catalogoPlanteles[index]
+		this.form.controls['plantel'].setValue(plantel.label);
+		this.form.controls['idPlantel'].setValue(idPlantel);
+		this.catalogoService.getCarreras(idPlantel).subscribe((response: ComboDTO[]) => {
+			this.catalogoCarreras = response
+		}, (error: HttpErrorResponse) => {
+			console.log(error.message);
+		}, () => {
+			this.isLoading = false
+		});
+	}
+
+	onCarreraChange(event: any) {
+
+	}
+
 	onEstadoChange(event: any) {
 		this.isLoading = true
 		const idEstado = event.option.value;
@@ -190,7 +218,10 @@ export class AltaUsuarioComponent implements OnInit {
 			console.log(error.message)
 		}, () => {
 			this.isLoading = false
-		})
+		});
+		if (this.form.controls['idPerfil'] != null) {
+			this.loadPlanteles(this.f['idEstado'].value);
+		}
 	}
 
 	onMunicipioChange(event: any) {
@@ -210,6 +241,33 @@ export class AltaUsuarioComponent implements OnInit {
 			);
 		}), (error: HttpErrorResponse) => {
 			console.log(error.message)
+		}, () => this.isLoading = false)
+	}
+
+	onPerfilChange() {
+		const idPerfil = this.form.controls['idPerfil'].value;
+		if (idPerfil != 1) {
+			const idEstado = this.form.controls['idEstado'].value;
+			console.log(idEstado)
+			if (idEstado != null) {
+				this.loadPlanteles(idEstado);
+			} else {
+				console.log('agregando error')
+				this.form.controls['estado'].markAsTouched();
+				this.form.controls['estado'].setErrors({required: true})
+			}
+		}
+	}
+
+	private loadPlanteles(idEstado: any) {
+		this.catalogoService.getPlanteles(idEstado).subscribe((response: ComboDTO[]) => {
+			this.catalogoPlanteles = response;
+			this.filtredPlanteles = this.form.controls['plantel'].valueChanges.pipe(
+				startWith(''),
+				map(value => this._filter_Planteles(value || ''))
+			)
+		}, (error: HttpErrorResponse) => {
+			console.log(error.message);
 		}, () => this.isLoading = false)
 	}
 
@@ -323,6 +381,10 @@ export class AltaUsuarioComponent implements OnInit {
 
 	private _filter_Asentaminetos(value: string): ComboDTO[] {
 		return this.catalogoAsentamietno.filter((option => option.label.toLowerCase().includes(value.toLowerCase())))
+	}
+
+	private _filter_Planteles(value: string): ComboDTO[] {
+		return this.catalogoPlanteles.filter((option) => option.label.toLowerCase().includes(value.toLowerCase()))
 	}
 
 	get f(): { [key: string]: AbstractControl } {

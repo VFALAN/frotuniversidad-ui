@@ -1,5 +1,5 @@
 export function fuctionObtenerIdUsuario(){
-	const token = sessionStorage.getItem('token');
+	const token = sessionStorage.getItem('user_token');
 	if(token){
 		const payload = token.split('.')[1]
 		const data = JSON.parse(window.atob(payload));
@@ -8,3 +8,4 @@ export function fuctionObtenerIdUsuario(){
 		return null;
 	}
 }
+

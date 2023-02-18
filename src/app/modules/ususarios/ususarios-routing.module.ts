@@ -21,28 +21,28 @@ const routes: Routes = [
     path: 'editar-usuario/:idUsuario',
     component: EditarUsuarioComponent,
     resolve: {
-      respuesta: EditarUsuarioResolver
+      data: EditarUsuarioResolver
     }
   },
   {
     path: 'alta-usuarios',
     component: AltaUsuarioComponent,
     resolve: {
-      respuesta: AltaUsuarioResolver
+      data: AltaUsuarioResolver
     }
   },
   {
     path: 'detalle-usuario/:idUsuario',
     component: DetalleUsuarioComponent,
     resolve: {
-      respuesta: DetalleUsuarioResolver
+      data: DetalleUsuarioResolver
     }
   },
   {
     path : 'grafica-usuarios',
     component : GraficaUsuarioComponent,
     resolve : {
-      respuesta: GraficaUsuarioResolver
+      data: GraficaUsuarioResolver
     }
   }
 ];
