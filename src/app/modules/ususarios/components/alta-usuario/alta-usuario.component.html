@@ -26,9 +26,8 @@
 							<mat-form-field>
 								<mat-label>Nombre</mat-label>
 								<input formControlName="nombre"
-									   (change)="f['nombre'].setValue(f['nombre'].value.toUpperCase())"
-									   placeholder="Ingresa Tu Nombre"
-									   matInput type="text">
+									(change)="f['nombre'].setValue(f['nombre'].value.toUpperCase())"
+									placeholder="Ingresa Tu Nombre" matInput type="text">
 								<mat-error *ngIf="f['nombre'].errors && (f['nombre'].touched || f['nombre'].dirty)">
 									*Campo Requerido
 								</mat-error>
@@ -39,9 +38,8 @@
 							<mat-form-field>
 								<mat-label>Apellido Paterno</mat-label>
 								<input formControlName="apellidoPaterno"
-									   (change)="f['apellidoPaterno'].setValue(f['apellidoPaterno'].value.toUpperCase())"
-									   placeholder="Ingresa Tu Apellido Paterno"
-									   matInput type="text">
+									(change)="f['apellidoPaterno'].setValue(f['apellidoPaterno'].value.toUpperCase())"
+									placeholder="Ingresa Tu Apellido Paterno" matInput type="text">
 								<mat-error
 									*ngIf="f['apellidoPaterno'].hasError('required') && (f['apellidoPaterno'].touched || f['apellidoPaterno'].dirty)">
 									*Campo Requerido
@@ -53,10 +51,8 @@
 							<mat-form-field>
 								<mat-label>Apellido Materno</mat-label>
 								<input matInput
-									   (change)="f['apellidoMaterno'].setValue(f['apellidoMaterno'].value.toUpperCase())"
-									   placeholder="Ingresa Tu Apellido"
-									   formControlName="apellidoMaterno"
-									   type="text">
+									(change)="f['apellidoMaterno'].setValue(f['apellidoMaterno'].value.toUpperCase())"
+									placeholder="Ingresa Tu Apellido" formControlName="apellidoMaterno" type="text">
 								<mat-error
 									*ngIf="f['apellidoMaterno'].hasError('required') && (f['apellidoMaterno'].touched || f['apellidoMaterno'].dirty)">
 									*Campo Requerido
@@ -66,16 +62,10 @@
 						<div class=" pt-2 col-3 d-flex justify-content-center">
 							<mat-form-field>
 								<mat-label>Fecha De Nacimiento</mat-label>
-								<input
-									matInput
-									(dateChange)="calcularEdad($event)"
-									formControlName="fechaNacimiento"
+								<input matInput (dateChange)="calcularEdad($event)" formControlName="fechaNacimiento"
 									[matDatepicker]="fechaNaciminetoPicker">
 								<mat-datepicker-toggle matSuffix [for]="fechaNaciminetoPicker"></mat-datepicker-toggle>
-								<mat-datepicker
-
-									startView="multi-year"
-									[startAt]="startDate"
+								<mat-datepicker startView="multi-year" [startAt]="startDate"
 									#fechaNaciminetoPicker></mat-datepicker>
 								<mat-error
 									*ngIf="f['fechaNacimiento'].hasError('required') && (f['fechaNacimiento'].touched || f['fechaNacimiento'].dirty)">
@@ -94,10 +84,7 @@
 						<div class=" pt-2 col-3 d-flex justify-content-center">
 							<mat-form-field>
 								<mat-label>Curp</mat-label>
-								<input matInput
-									   formControlName="curp"
-									   placeholder="Ingresa Tu CURP"
-									   type="text">
+								<input matInput formControlName="curp" placeholder="Ingresa Tu CURP" type="text">
 								<mat-error
 									*ngIf="f['curp'].hasError('required') && (f['curp'].touched || f['curp'].dirty)">
 									*Campo Requerido
@@ -121,9 +108,7 @@
 						<div class=" pt-2 col-3 d-flex justify-content-center">
 							<mat-form-field>
 								<mat-label>Descripcion Genero</mat-label>
-								<input matInput
-									   placeholder="Ingresa Tu Genero"
-									   formControlName="desGenero" type="text">
+								<input matInput placeholder="Ingresa Tu Genero" formControlName="desGenero" type="text">
 								<mat-error
 									*ngIf="f['desGenero'].errors && (f['desGenero'].touched || f['desGenero'].dirty)">
 									*Campo Requerido
@@ -145,18 +130,14 @@
 						<div class=" pt-2 col-3 d-flex justify-content-center">
 							<mat-form-field>
 								<mat-label>Estado</mat-label>
-								<input matInput
-									   formControlName="estado"
-									   [matAutocomplete]="estadoAuto"
-								>
+								<input matInput formControlName="estado" [matAutocomplete]="estadoAuto">
 								<mat-autocomplete (optionSelected)="onEstadoChange($event)" autoActiveFirstOption
-												  #estadoAuto="matAutocomplete">
+									#estadoAuto="matAutocomplete">
 									<mat-option *ngFor="let option of filtredEstados | async" [value]="option.value">
 										{{option.label}}
 									</mat-option>
 								</mat-autocomplete>
-								<mat-error
-									*ngIf="f['estado'].errors && (f['estado'].touched || f['estado'].dirty)">
+								<mat-error *ngIf="f['estado'].errors && (f['estado'].touched || f['estado'].dirty)">
 									*Campo Requerido
 								</mat-error>
 								<mat-error *ngIf="f['estado'].hasError('faltante')">
@@ -167,12 +148,9 @@
 						<div class=" pt-2 col-3 d-flex justify-content-center">
 							<mat-form-field>
 								<mat-label>Municipio</mat-label>
-								<input matInput
-									   formControlName="municipio"
-									   [matAutocomplete]="municipioAuto"
-								>
+								<input matInput formControlName="municipio" [matAutocomplete]="municipioAuto">
 								<mat-autocomplete #municipioAuto="matAutocomplete"
-												  (optionSelected)="onMunicipioChange($event)">
+									(optionSelected)="onMunicipioChange($event)">
 									<mat-option *ngFor="let option of filtredMunicipios |async" [value]="option.value">
 										{{option.label}}
 									</mat-option>
@@ -186,14 +164,11 @@
 						<div class=" pt-2 col-3 d-flex justify-content-center">
 							<mat-form-field>
 								<mat-label>Asentamiento</mat-label>
-								<input matInput
-									   formControlName="asentamiento"
-									   [matAutocomplete]="asentamientoAuto"
-								>
+								<input matInput formControlName="asentamiento" [matAutocomplete]="asentamientoAuto">
 								<mat-autocomplete #asentamientoAuto="matAutocomplete"
-												  (optionSelected)="onAsentamientoChange($event)">
+									(optionSelected)="onAsentamientoChange($event)">
 									<mat-option *ngFor="let option of filtredAsentaminetos|async"
-												[value]="option.value">
+										[value]="option.value">
 										{{option.label}}
 									</mat-option>
 								</mat-autocomplete>
@@ -207,8 +182,7 @@
 							<mat-form-field>
 								<mat-label> Calle</mat-label>
 								<input formControlName="calle" matInput>
-								<mat-error
-									*ngIf="f['calle'].errors && (f['calle'].touched || f['calle'].dirty)">
+								<mat-error *ngIf="f['calle'].errors && (f['calle'].touched || f['calle'].dirty)">
 									*Campo Requerido
 								</mat-error>
 							</mat-form-field>
@@ -324,7 +298,7 @@
 						<mat-form-field>
 							<mat-label> confirmar Contraseña</mat-label>
 							<input matInput formControlName="passwordComfirm"
-								   [type]="hideConfirmPasswod ? 'password' : 'text'">
+								[type]="hideConfirmPasswod ? 'password' : 'text'">
 							<button mat-icon-button matSuffix (click)="hideConfirmPasswod = !hideConfirmPasswod">
 								<mat-icon> {{hideConfirmPasswod ? 'visibility_off' : 'visibility'}} </mat-icon>
 							</button>
@@ -369,13 +343,12 @@
 						</mat-form-field>
 					</div>
 					<div class=" pt-2 col-3 d-flex justify-content-center"
-						 *ngIf="f['idPerfil'].value!=null&&f['idPerfil'].value != '1'">
+						*ngIf="f['idPerfil'].value!=null&&f['idPerfil'].value != '1'">
 						<mat-form-field>
 							<mat-label>Plantel</mat-label>
 							<input matInput formControlName="plantel" [matAutocomplete]="plantelAuto" type="text">
 							<mat-autocomplete autoActiveFirstOption (optionSelected)="onPlantelChange($event)"
-											  #plantelAuto="matAutocomplete"
-							>
+								#plantelAuto="matAutocomplete">
 								<mat-option *ngFor="let option of filtredPlanteles | async " [value]="option.value">
 									{{option.label}}
 								</mat-option>
@@ -388,7 +361,7 @@
 						</mat-form-field>
 					</div>
 					<div class=" pt-2 col-3 d-flex justify-content-center"
-						 *ngIf="(f['idPerfil'].value!=null) && (f['idPerfil'].value==2 ||f['idPerfil'].value==4)">
+						*ngIf="(f['idPerfil'].value!=null) && (f['idPerfil'].value==2 ||f['idPerfil'].value==4)">
 						<mat-form-field>
 							<mat-label>Carrera</mat-label>
 							<mat-select formControlName="idCarrera">
@@ -418,13 +391,12 @@
 							<mat-label>
 								Fotografia
 							</mat-label>
-							<ngx-mat-file-input
-								accept=".png, .jpg, .jpeg"
-								[multiple]="false" formControlName="fotografiaRegsitro">
 
+							<ngx-mat-file-input accept=".png, .jpg, .jpeg" [multiple]="false"
+								formControlName="fotografiaRegsitro">
 							</ngx-mat-file-input>
 							<button matSuffix mat-icon-button (click)="showCamera=true" data-bs-toggle="modal"
-									data-bs-target="#exampleModal">
+								data-bs-target="#exampleModal">
 								<mat-icon>photo_camera</mat-icon>
 							</button>
 							<mat-error
@@ -438,7 +410,7 @@
 						<mat-form-field>
 							<mat-label>Curp</mat-label>
 							<ngx-mat-file-input formControlName="curpArchivo" [multiple]="false"
-												accept=".png,.jpg,.jpeg,.pdf">
+								accept=".png,.jpg,.jpeg,.pdf">
 
 							</ngx-mat-file-input>
 							<mat-error
@@ -460,9 +432,7 @@
 					<div class="justify-content-center d-flex  pt-2 col-3">
 						<mat-form-field>
 							<mat-label>Comprobante de domicilio</mat-label>
-							<ngx-mat-file-input
-								formControlName="comprobanteDomicilio"
-							></ngx-mat-file-input>
+							<ngx-mat-file-input formControlName="comprobanteDomicilio"></ngx-mat-file-input>
 							<mat-error
 								*ngIf="f['comprobanteDomicilio'].hasError('required') && (f['comprobanteDomicilio'].touched || f['comprobanteDomicilio'].dirty)">
 								Campo Requerido
@@ -473,9 +443,8 @@
 			</mat-card>
 			<div class="flex-row d-flex justify-content-start pt-2 ">
 				<div class=" pt-2 col-1 d-flex justify-content-center">
-					<button (click)="guardar()"
-							[disabled]="!form.valid"
-							class="btn btn-success">Guardar <i class="fa-sharp fa-solid fa-floppy-disk"></i></button>
+					<button (click)="guardar()" [disabled]="!form.valid" class="btn btn-success">Guardar <i
+							class="fa-sharp fa-solid fa-floppy-disk"></i></button>
 				</div>
 			</div>
 		</form>
@@ -495,20 +464,16 @@
 			</div>
 			<div class="modal-body">
 				<div class="justify-content-center">
-					<webcam *ngIf="showCamera"
-							[width]="480"
-							[trigger]="trigger"
-							(imageCapture)="handleImage($event)"
-							(initError)="handlerInitError($event)"></webcam>
+					<webcam *ngIf="showCamera" [width]="480" [trigger]="trigger" (imageCapture)="handleImage($event)"
+						(initError)="handlerInitError($event)"></webcam>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button #btnCloseModal type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-						(click)="showCamera=false">Cancelar
+					(click)="showCamera=false">Cancelar
 				</button>
 				<button type="button" (click)="triggerSnapshot()" class="btn btn-primary">Capturar</button>
 			</div>
 		</div>
 	</div>
 </div>
-

@@ -1,31 +1,29 @@
-<mat-form-field>
-	<mat-label></mat-label>
-	<button *ngIf="enableSelectFile" #uploadButton matTooltip="Seleccione Un Archivo" mat-icon-button matPrefix
-		(click)="f_input.click()">
-		<mat-icon>attach_file</mat-icon>
-	</button>
-	<button *ngIf="enableDownload" matTooltip="Descargar Archivo" #downloadButton mat-icon-button matSuffix>
-		<mat-icon>download</mat-icon>
-	</button>
-	<button *ngIf="enablePreView" #preViewButton matTooltip="Pre Visualizar Archivo" mat-icon-button matSuffix>
-		<mat-icon>
-			preview
-		</mat-icon>
-	</button>
-	<button *ngIf="enableDropFile" matTooltip="Borrar" (click)="dropFile()" #preViewButton mat-icon-button matSuffix>
-		<mat-icon>
-			delete
-		</mat-icon>
-	</button>
-	<button *ngIf="enableCamera" matTooltip="Tomar Fotografia" (click)="showCamera=true" #preViewButton mat-icon-button
-		matPrefix data-bs-target="#exampleModal" data-bs-toggle="modal">
-		<mat-icon>
-			photo_camera
-		</mat-icon>
-	</button>
-	<input matInput placeholder="Seleccione en Archivo" disabled="true" [value]="_value?.nombre">
-	<input type="file" hidden #f_input [accept]="acept" (change)="selectionFile(f_input.files)">
-</mat-form-field>
+<button *ngIf="enableSelectFile" #uploadButton matTooltip="Seleccione Un Archivo" mat-icon-button matPrefix
+	(click)="f_input.click()">
+	<mat-icon>attach_file</mat-icon>
+</button>
+<button *ngIf="enableDownload" matTooltip="Descargar Archivo" #downloadButton mat-icon-button matSuffix>
+	<mat-icon>download</mat-icon>
+</button>
+<button *ngIf="enablePreView" #preViewButton matTooltip="Pre Visualizar Archivo" mat-icon-button matSuffix>
+	<mat-icon>
+		preview
+	</mat-icon>
+</button>
+<button *ngIf="enableDropFile" matTooltip="Borrar" (click)="dropFile()" #preViewButton mat-icon-button matSuffix>
+	<mat-icon>
+		delete
+	</mat-icon>
+</button>
+<button *ngIf="enableCamera" matTooltip="Tomar Fotografia" (click)="showCamera=true" #preViewButton mat-icon-button
+	matPrefix data-bs-target="#exampleModal" data-bs-toggle="modal">
+	<mat-icon>
+		photo_camera
+	</mat-icon>
+</button>
+<input placeholder="Seleccione en Archivo" disabled="true" [value]="_value?.nombre">
+<input type="file" hidden #f_input [accept]="acept" (change)="selectionFile(f_input.files)">
+
 
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
