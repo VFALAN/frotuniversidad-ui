@@ -13,9 +13,7 @@ import { Router } from "@angular/router";
 })
 export class LoginComponent implements OnInit {
 	form: FormGroup
-	form2: any
 	hide: boolean = true;
-	data: any;
 	constructor(private authentificationService: AuthetificationService,
 		private router: Router,
 		private fb: FormBuilder) {
@@ -24,17 +22,12 @@ export class LoginComponent implements OnInit {
 			password: [null, [Validators.required]],
 			data: [null]
 		})
-		this.form2 = this.fb.group({
-			data: null
-		});
+
 	}
 
 	ngOnInit(): void {
 	}
-	printeVAlue() {
-		console.log(this.form2.controls['data'].value)
-		console.log(this.data)
-	}
+
 	login() {
 		const dataLogin: LoginDTO = this.form.getRawValue();
 		this.authentificationService.login(dataLogin).subscribe((respuesta) => {
