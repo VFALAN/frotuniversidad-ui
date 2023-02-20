@@ -24,7 +24,6 @@ export class AltaUsuarioComponent implements OnInit {
 	@ViewChild('btnCloseModal', {static: false})
 	bntCloseModal !: ElementRef;
 	hasCamera: boolean = false;
-
 	isLoading = false;
 	startDate = new Date(1980, 0, 1);
 	hidePassword = true;

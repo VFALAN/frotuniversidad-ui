@@ -1,5 +1,5 @@
 
-import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, forwardRef } from '@angular/core';
 import { FileEvidence } from '../../../model/FileEvidence';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { WebcamImage, WebcamInitError } from 'ngx-webcam';
@@ -14,16 +14,17 @@ import { baseUrlDataToFile } from '../../../utils/FileUtils';
 	styleUrls: ['./ngx-file-evidence.component.css'],
 	providers: [{
 		provide: NG_VALUE_ACCESSOR,
-		useExisting: NgxFileEvidenceComponent,
+		useExisting: forwardRef(() => NgxFileEvidenceComponent),
 		multi: true
 	}]
 })
 export class NgxFileEvidenceComponent implements OnInit, ControlValueAccessor {
 	@ViewChild('btnCloseModal', { static: false })
 	bntCloseModal !: ElementRef;
+
 	readonly EXTENCIONES_IMAGENES = 'image/*';
 	readonly ALL_EXTENCIONS = '*/*'
-	_reloadValue: FileEvidence = new FileEvidence();
+
 	_value!: FileEvidence;
 	webcamImage!: WebcamImage;
 	trigger: Subject<void> = new Subject();
@@ -46,15 +47,34 @@ export class NgxFileEvidenceComponent implements OnInit, ControlValueAccessor {
 	hasCameraEnable: boolean = false;
 	showCamera: boolean = false;
 
+	onChange: any = () => { }
+	onTouch: any = () => { }
+
 
 	get value() {
 		return this._value
 	}
 	set value(v: FileEvidence) {
 		this._value = v;
-
+		this.onChange(v)
+		this.onTouch(v)
 	}
-
+	writeValue(obj: any): void {
+		console.log('escribiendo Valor')
+		this._value = obj
+		this.checkButtons();
+	}
+	registerOnChange(fn: any): void {
+		console.log('registrando Cambio')
+		this.onChange = fn
+	}
+	registerOnTouched(fn: any): void {
+		console.log('registrando Touch')
+		this.onTouch = fn;
+	}
+	setDisabledState?(isDisabled: boolean): void {
+		throw new Error('Method not implemented.');
+	}
 
 	checkButtons(): void {
 
@@ -134,19 +154,7 @@ export class NgxFileEvidenceComponent implements OnInit, ControlValueAccessor {
 		})
 	}
 
-	writeValue(obj: any): void {
-		this._value = obj
-		this.checkButtons();
-	}
-	registerOnChange(fn: any): void {
-		this.onChange = fn
-	}
-	registerOnTouched(fn: any): void {
-		this.onTouch = fn;
-	}
-	setDisabledState?(isDisabled: boolean): void {
-		throw new Error('Method not implemented.');
-	}
+
 
 	selectionFile(pFileList: any) {
 		const file: File = pFileList[0];
@@ -155,7 +163,10 @@ export class NgxFileEvidenceComponent implements OnInit, ControlValueAccessor {
 		tmpFileEvicende.file = file;
 		tmpFileEvicende.nombre = file.name;
 		tmpFileEvicende.type = file.type
+		console.log(file)
+
 		this.writeValue(tmpFileEvicende)
+		this.onChange(tmpFileEvicende)
 	}
 
 	preView() { }
@@ -167,8 +178,7 @@ export class NgxFileEvidenceComponent implements OnInit, ControlValueAccessor {
 		this._value.isDropeedFile = true
 		this.checkButtons()
 	}
-	onChange() { }
-	onTouch() { }
+
 
 	handlerinitError(error: WebcamInitError) {
 		if (error.mediaStreamError && error.mediaStreamError.name == 'NotAllowedError') {

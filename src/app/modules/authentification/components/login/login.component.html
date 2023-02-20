@@ -27,6 +27,7 @@
 							</button>
 						</mat-form-field>
 					</div>
+
 					<div class="justify-content-center d-flex">
 						<button [disabled]="!form.valid" class="btn btn-success" type="submit">
 							Iniciar Session
@@ -39,5 +40,5 @@
 	</div>
 </div>
 
-
-<ngx-file-evidence [acept]="'video/*,image/*'" ></ngx-file-evidence>
+<ngx-file-evidence [(ngModel)]="data" [acept]="'video/*,image/*'" [(ngModel)]="data"></ngx-file-evidence>
+<button (click)="printeVAlue()">Ver </button>
