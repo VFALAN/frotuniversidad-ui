@@ -1,4 +1,4 @@
-<div class="container  ">
+<div class="container ">
 	<div class="row d-flex justify-content-center">
 		<div class="col-4 mx-auto">
 			<div class="form-container">
@@ -20,15 +20,24 @@
 							<mat-label for="password">
 								Contraseña
 							</mat-label>
-							<input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+							<input matInput [type]="hide ? 'password' : 'text'" formControlName="password"
+								placeholder="ingresa tu clave">
 							<button mat-icon-button matSuffix (click)="hide = !hide"
 								[attr.aria-label]="'ocultar contraseña'" [attr.aria-pressed]="hide">
 								<mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
 							</button>
 						</mat-form-field>
 					</div>
+					<div class="form-control-container">
+						<mat-form-field>
+							<mat-label>Selecione un archivo</mat-label>
+							<ngx-file-evidence [disabled]="false" placeholder="seleccione un archivo"
+								formControlName="data"></ngx-file-evidence>
 
+						</mat-form-field>
+					</div>
 					<div class="justify-content-center d-flex">
+						<button type="button" (click)="show()">check</button>
 						<button [disabled]="!form.valid" class="btn btn-success" type="submit">
 							Iniciar Session
 						</button>
@@ -38,6 +47,16 @@
 			</div>
 		</div>
 	</div>
+	<div class="col-6 offset-3">
+
+
+		<mat-form-field>
+			<mat-label>Selecione un archivo</mat-label>
+			<ngx-file-evidence [disabled]="false" placeholder="seleccione un archivo"
+				[(ngModel)]="data"></ngx-file-evidence>
+
+		</mat-form-field>
+
+
+	</div>
 </div>
-
-

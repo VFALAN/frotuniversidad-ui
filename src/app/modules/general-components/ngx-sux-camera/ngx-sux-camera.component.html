@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Tomar Foto</h2>
+<mat-dialog-content>
+	<webcam [width]="480" [trigger]="trigger" (imageCapture)="handleImage($event)"
+		(initError)="handlerinitError($event)"></webcam>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+	<button mat-button mat-dialog-close>Cancelar</button>
+	<button mat-button color="primary" (click)="triggerSnapshot()">Tomar Foto</button>
+	<button mat-button [mat-dialog-close]="data">Guardar</button>
+</mat-dialog-actions>
