@@ -12,18 +12,16 @@ import { baseUrlDataToFile } from '../../../utils/FileUtils';
 	templateUrl: './ngx-sux-camera.component.html',
 	styleUrls: ['./ngx-sux-camera.component.sass']
 })
-export class NgxSuxCameraComponent implements OnInit {
+export class NgxSuxCameraComponent {
 	hasCameraEnable: boolean = true;
 	webcamImage!: WebcamImage;
 	trigger: Subject<void> = new Subject();
 	nextWebcam: Subject<void> = new Subject();
 	enableDownload: boolean = true;
-
+	showImage = false;
 	constructor(public dialogRef: MatDialogRef<NgxSuxCameraComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-	ngOnInit(): void {
-		console.log('se abrio el componente')
-	}
+
 
 	public triggerSnapshot(): void {
 		this.trigger.next();
@@ -40,8 +38,8 @@ export class NgxSuxCameraComponent implements OnInit {
 
 	public handleImage(webcamImage: WebcamImage): void {
 		const fechaStr = moment(new Date()).format('yyyy-MM-dd');
-
 		this.webcamImage = webcamImage;
+
 		Swal.fire({
 			title: 'Desea Usar Esta Fotografia',
 			imageUrl: webcamImage.imageAsDataUrl,
@@ -51,10 +49,11 @@ export class NgxSuxCameraComponent implements OnInit {
 		}).then((res) => {
 			if (res.isConfirmed) {
 				const file = baseUrlDataToFile(webcamImage.imageAsDataUrl, `Picture_${fechaStr}.png`, 'image/png');
-				console.log(file, 'archivo generado');
 				this.data = file;
-				console.log(this.data);
+				this.showImage = true;
 
+			} else {
+				this.showImage = false;
 			}
 		})
 	}
@@ -63,7 +62,7 @@ export class NgxSuxCameraComponent implements OnInit {
 	handlerinitError(error: WebcamInitError) {
 		if (error.mediaStreamError && error.mediaStreamError.name == 'NotAllowedError') {
 			this.hasCameraEnable = false;
-			console.warn("Camera access was allowed by user!")
+			console.warn("Camera access was allowed by user!");
 		} else {
 			this.hasCameraEnable = true;
 		}

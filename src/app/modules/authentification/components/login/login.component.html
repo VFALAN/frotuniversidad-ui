@@ -30,10 +30,9 @@
 					</div>
 					<div class="form-control-container">
 						<mat-form-field>
-							<mat-label>Selecione un archivo</mat-label>
-							<ngx-file-evidence [disabled]="false" placeholder="seleccione un archivo"
+							<mat-label>Seleccione un archivo</mat-label>
+							<ngx-file-evidence matInput  placeholder="seleccione un archivo"
 								formControlName="data"></ngx-file-evidence>
-
 						</mat-form-field>
 					</div>
 					<div class="justify-content-center d-flex">
@@ -47,16 +46,16 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-6 offset-3">
+	<!-- <div class="col-6 offset-3">
 
 
 		<mat-form-field>
-			<mat-label>Selecione un archivo</mat-label>
-			<ngx-file-evidence [disabled]="false" placeholder="seleccione un archivo"
+			<mat-label>Seleccione un archivo</mat-label>
+			<ngx-file-evidence [required]="true" placeholder="seleccione un archivo"
 				[(ngModel)]="data"></ngx-file-evidence>
 
 		</mat-form-field>
 
 
-	</div>
+	</div> -->
 </div>

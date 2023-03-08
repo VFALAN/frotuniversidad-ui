@@ -10,6 +10,6 @@ export class FileEvidence {
 	type!: string;
 	isDropeedFile: boolean = false;
 	myneType!: string;
-	constructor() { }
+	constructor() { /* TODO document why this constructor is empty */  }
 
 }
