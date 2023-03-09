@@ -9,7 +9,7 @@ export class FileEvidence {
 	tipoArchivo!: string;
 	type!: string;
 	isDropeedFile: boolean = false;
-	myneType!: string;
+	mineType!: string;
 	constructor() { /* TODO document why this constructor is empty */  }
 
 }

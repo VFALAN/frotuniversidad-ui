@@ -14,17 +14,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { NgxSuxCameraComponent } from '../ngx-sux-camera/ngx-sux-camera.component';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-
+import { saveAs } from 'file-saver';
 @Component({
 	selector: 'ngx-file-evidence',
 	templateUrl: './ngx-file-evidence.component.html',
 	styleUrls: ['./ngx-file-evidence.component.css'],
 	providers: [
-		// 	{
-		// 	provide: NG_VALUE_ACCESSOR,
-		// 	useExisting: forwardRef(() => NgxFileEvidenceComponent),
-		// 	multi: true
-		// },
 		{
 			provide: MatFormFieldControl, useExisting: NgxFileEvidenceComponent
 		}]
@@ -203,44 +198,62 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 
 	download() {
 		if (this.form.valid) {
-			this._http.get<any>(this.form.controls['downloadUrl'].value).subscribe(res => {
-				console.log(res)
-			}, err => {
-				console.log(err)
-			}, () => {
-				console.log('Termino de consumo')
+
+			this._http.get(this.form.controls['downloadUrl'].value, { responseType: 'arraybuffer' }).subscribe({
+				next: (response) => {
+					this.preview();
+					console.log(this.form.getRawValue())
+					const blob = new Blob([response], { type: this.form.controls['mineType'].value })
+					console.log(blob);
+					saveAs(blob, this.form.controls['nombre'].value);
+				},
+				error: (error) => {
+					console.error(error)
+				}
 			})
 		}
 	}
 	dropFile(): void {
 		if (this.form.valid) {
-			Swal.fire({
-				title: 'Confirmar Eliminación',
-				text: `Esta Seguro de eliminar el archivo: ${this.form.controls['nombre'].value} no podra ser recuperado más adelante`,
-				showCancelButton: true,
-				confirmButtonText: 'Eliminar el Archivo',
-				cancelButtonText: 'Cancelar'
-			}).then(res => {
-				if (res.isConfirmed) {
-					this.form.controls['file']
-					this.form.controls['nombre'].enable();
-					this.form.controls['nombre'].setValue('');
-					this.form.controls['nombre'].setValidators(Validators.required)
-					this.checkButtons()
-					this.ngOnInit();
-				}
-				this.stateChanges.next();
-			})
+			if (this.form.controls['id'].value != null) {
+				Swal.fire({
+					title: 'Confirmar Eliminación',
+					text: `Esta Seguro de eliminar el archivo: ${this.form.controls['nombre'].value} no podra ser recuperado más adelante`,
+					showCancelButton: true,
+					confirmButtonText: 'Eliminar el Archivo',
+					cancelButtonText: 'Cancelar'
+				}).then(res => {
+					if (res.isConfirmed) {
+						this.disableFile();
+					}
+					this.stateChanges.next();
+				})
+			} else {
+				this.cleanForm();
+			}
 		}
 		this.stateChanges.next();
 	}
-
+	private cleanForm() {
+		this.form.controls['file'].setValue(null)
+		this.form.controls['nombre'].enable();
+		this.form.controls['nombre'].setValue('');
+		this.form.controls['nombre'].setValidators(Validators.required)
+		this.checkButtons();
+		this.ngOnInit();
+	}
 	disableFile(): void {
 		if (this.form.valid) {
 			if (this.form.controls['id'].value != undefined && this.form.controls['id'].value != null) {
 				this.archivoService.disabledFile(this.form.controls['id'].value).subscribe({
 					next: (res) => {
-						console.log('El archivo fue dado de baja', res)
+						this.archivoService.disabledFile(this.form.controls['id'].value).subscribe({
+							next: (response => {
+								this.cleanForm();
+							}),
+							error: (error => { console.log(error) }),
+							complete: () => { }
+						})
 					}, error: (err) => { console.log(err) }, complete: () => {
 						console.log('se completo la peticion')
 						this.checkButtons();
@@ -251,10 +264,9 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 	}
 
 	writeValue(obj: any): void {
+		console.log(obj)
 		if (obj != null) {
-			console.log(obj.file)
-			this.form.controls['nombre'].setValue(obj?.nombre != null ? obj.nombre : '')
-			this.form.controls['type'].setValue(obj.type != null ? obj.type : '')
+			this.form.patchValue(obj);
 			this.form.controls['nombre'].value != '' ? this.form.controls['nombre'].disable() : this.form.controls['nombre'].enable();
 		}
 		this.checkButtons();
@@ -283,7 +295,7 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 			this.enableSelectFile = false;
 			this.enableCamera = false;
 			this.enableDropFile = true;
-			this.enableDownload = (this.form.controls['downloadUrl'].value != null && this.form.controls['downloadUrl'].value.includes('http'))
+			this.enableDownload = this.form.controls['downloadUrl'].value != null || this.form.controls['downloadUrl'].value.includes('http')
 			this.enablePreView = this.validPreview();
 		} else {
 

@@ -40,8 +40,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 		MatTooltipModule,
 		WebcamModule,
 		MatDialogModule,
-		ReactiveFormsModule
-	],
+		ReactiveFormsModule],
 	exports: [
 		NgxFileEvidenceComponent,
 		LoadingComponent,

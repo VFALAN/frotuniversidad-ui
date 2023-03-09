@@ -11,7 +11,7 @@ export class ArchivosService {
 	constructor(private _http: HttpClient,) {
 
 	}
-	_baseUrl = `${environment.baseUrl}${environment.apis.minio}`
+	_baseUrl = `http://localhost:8083/${environment.apis.minio}`
 
 	disabledFile(idArchivo: any): Observable<boolean> {
 		const opt = {
