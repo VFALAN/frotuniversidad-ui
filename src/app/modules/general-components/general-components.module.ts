@@ -15,14 +15,17 @@ import { MatInputModule } from '@angular/material/input';
 import { NgxFileEvidenceComponent } from './ngx-file-evidence/ngx-file-evidence.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { WebcamModule } from 'ngx-webcam';
-
+import { NgxSuxCameraComponent } from './ngx-sux-camera/ngx-sux-camera.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
 	declarations: [
 		LoadingComponent,
 		NgxPhotograficComponent,
 		NgNotificationComponent,
-		NgxFileEvidenceComponent
+		NgxFileEvidenceComponent,
+		NgxSuxCameraComponent
 	],
 	imports: [
 		CommonModule,
@@ -35,13 +38,15 @@ import { WebcamModule } from 'ngx-webcam';
 		MatFormFieldModule,
 		MatInputModule,
 		MatTooltipModule,
-		WebcamModule
-	],
+		WebcamModule,
+		MatDialogModule,
+		ReactiveFormsModule],
 	exports: [
 		NgxFileEvidenceComponent,
 		LoadingComponent,
 		NgxPhotograficComponent,
-		NgNotificationComponent
+		NgNotificationComponent,
+		NgxSuxCameraComponent
 	], providers: [
 		NotificacionService
 	]

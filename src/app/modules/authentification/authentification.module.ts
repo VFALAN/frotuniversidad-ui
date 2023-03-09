@@ -30,7 +30,8 @@ import { GeneralComponentsModule } from '../general-components/general-component
 		GeneralComponentsModule
 	],
 	providers: [
-		AuthetificationService
+		AuthetificationService,
+
 	]
 })
 export class AuthentificationModule { }

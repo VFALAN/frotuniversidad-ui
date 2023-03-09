@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Tomar Foto</h2>
+<mat-dialog-content>
+	<webcam *ngIf="!showImage" [width]="480" [trigger]="trigger" (imageCapture)="handleImage($event)"
+		(initError)="handlerinitError($event)"></webcam>
+	<div *ngIf="showImage">
+		<img [src]="webcamImage.imageAsDataUrl" alt="" srcset="">
+	</div>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+	<button color="warn" mat-button mat-dialog-close>Cancelar</button>
+	<button mat-button *ngIf="!showImage" color="primary" (click)="triggerSnapshot()">Capturar</button>
+	<button mat-button *ngIf="showImage" color="primary" (click)="showImage=false">Tomar Otra</button>
+	<button *ngIf="showImage" color="accent" mat-button [mat-dialog-close]="data">Guardar</button>
+</mat-dialog-actions>

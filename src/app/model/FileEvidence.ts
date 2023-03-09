@@ -1,5 +1,5 @@
 export class FileEvidence {
-	file!: File;
+	file!: File | undefined;
 	nombre!: string;
 	path!: string;
 	id!: number;
@@ -9,6 +9,7 @@ export class FileEvidence {
 	tipoArchivo!: string;
 	type!: string;
 	isDropeedFile: boolean = false;
-	constructor() { }
+	mineType!: string;
+	constructor() { /* TODO document why this constructor is empty */  }
 
 }

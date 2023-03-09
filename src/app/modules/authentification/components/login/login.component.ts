@@ -14,23 +14,25 @@ import { Router } from "@angular/router";
 export class LoginComponent implements OnInit {
 	form: FormGroup
 	hide: boolean = true;
+
 	constructor(private authentificationService: AuthetificationService,
 		private router: Router,
 		private fb: FormBuilder) {
+
 		this.form = this.fb.group({
 			username: [null, [Validators.required]],
 			password: [null, [Validators.required]],
-			data: [null]
 		})
 
 	}
 
 	ngOnInit(): void {
+
 	}
 
 	login() {
 		const dataLogin: LoginDTO = this.form.getRawValue();
-		this.authentificationService.login(dataLogin).subscribe((respuesta) => {
+		this.authentificationService.login(dataLogin).subscribe(respuesta => {
 			if (respuesta != "") {
 				sessionStorage.setItem(EStorageKeys.USER_TOKEN, respuesta);
 				this.router.navigate(["inicio"]);
@@ -40,4 +42,5 @@ export class LoginComponent implements OnInit {
 			console.log(error.message);
 		})
 	}
+
 }
