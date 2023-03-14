@@ -1,19 +1,19 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {ComboDTO} from "../../../../model/combo-dto";
-import {CatalogoEstadosService} from "../../../../services/catalogo-estados.service";
-import {UsuarioService} from "../../services/usuario.service";
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CATALOGO_ESTATUS, CATALOGO_GENERO, CATALOGO_PERFILES} from "../../../../utils/Catalogos";
-import {MatDatepickerInputEvent} from "@angular/material/datepicker";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
+import { ComboDTO } from "../../../../model/combo-dto";
+import { CatalogoEstadosService } from "../../../../services/catalogo-estados.service";
+import { UsuarioService } from "../../services/usuario.service";
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CATALOGO_ESTATUS, CATALOGO_GENERO, CATALOGO_PERFILES } from "../../../../utils/Catalogos";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import * as moment from "moment";
-import {map, Observable, startWith, Subject} from "rxjs";
-import {HttpErrorResponse} from "@angular/common/http";
+import { map, Observable, startWith, Subject } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
 import Validation from "../../../../utils/Validation";
 import Swal from 'sweetalert2'
-import {UsuarioDTO} from "../../model/usuario-dto";
-import {WebcamImage, WebcamInitError} from "ngx-webcam";
-import {baseUrlDataToFile} from "../../../../utils/FileUtils";
+import { UsuarioDTO } from "../../model/usuario-dto";
+import { WebcamImage, WebcamInitError } from "ngx-webcam";
+import { baseUrlDataToFile } from "../../../../utils/FileUtils";
 
 @Component({
 	selector: 'app-alta-usuario',
@@ -21,7 +21,7 @@ import {baseUrlDataToFile} from "../../../../utils/FileUtils";
 	styleUrls: ['./alta-usuario.component.sass']
 })
 export class AltaUsuarioComponent implements OnInit {
-	@ViewChild('btnCloseModal', {static: false})
+	@ViewChild('btnCloseModal', { static: false })
 	bntCloseModal !: ElementRef;
 	hasCamera: boolean = false;
 	isLoading = false;
@@ -69,7 +69,7 @@ export class AltaUsuarioComponent implements OnInit {
 		}).then((res) => {
 			if (res.isConfirmed) {
 				this.captureImage = webcamImage!.imageAsDataUrl.split(',')[1];
-				const blob = new Blob([this.captureImage], {type: 'image/png'});
+				const blob = new Blob([this.captureImage], { type: 'image/png' });
 				const file = baseUrlDataToFile(webcamImage.imageAsDataUrl, `${titulo}_${fechaStr}.png`, 'image/png');
 				this.form.controls['fotografiaRegsitro'].setValue(file);
 				this.showCamera = false;
@@ -96,10 +96,10 @@ export class AltaUsuarioComponent implements OnInit {
 	}
 
 	constructor(private route: ActivatedRoute,
-				private router: Router,
-				private catalogoService: CatalogoEstadosService,
-				private usuarioService: UsuarioService,
-				private fb: FormBuilder) {
+		private router: Router,
+		private catalogoService: CatalogoEstadosService,
+		private usuarioService: UsuarioService,
+		private fb: FormBuilder) {
 	}
 
 	ngOnInit(): void {
@@ -109,55 +109,55 @@ export class AltaUsuarioComponent implements OnInit {
 
 	initForm(): void {
 		this.form = this.fb.group({
-				apellidoPaterno: [null, Validators.required],
-				apellidoMaterno: [null, Validators.required],
-				nombre: [null, Validators.required],
-				correo: [null, [Validators.required, Validators.email,
-					Validation.emailAvalible(this.isAvalibleCorreo)]
+			apellidoPaterno: [null, Validators.required],
+			apellidoMaterno: [null, Validators.required],
+			nombre: [null, Validators.required],
+			correo: [null, [Validators.required, Validators.email,
+			Validation.emailAvalible(this.isAvalibleCorreo)]
 
-				],
-				nombreUsuario: [null, [Validators.required,
-					Validation.usernameAvalible(this.isAvalibleNombreUsuario)
-				],
+			],
+			nombreUsuario: [null, [Validators.required,
+			Validation.usernameAvalible(this.isAvalibleNombreUsuario)
+			],
 
-				],
-				curp: [null, Validators.required],
-				password: [null, [Validators.required,
-					Validation.containUpper(),
-					Validation.containLoweer(),
-					Validation.containUpper(),
-					Validation.containNumber(),
-					Validation.containSpecialCaracter(),
-					Validators.minLength(8)]],
-				passwordComfirm: [null, Validators.required],
-				idEstatus: [null, Validators.required],
-				idPerfil: [null, Validators.required],
-				idEstado: [null, Validators.required],
-				estado: [null, Validators.required],
-				idMunicipio: [null, Validators.required],
-				municipio: [null, Validators.required],
-				idAsentamiento: [null, Validators.required],
-				asentamiento: [null, Validators.required],
-				desGenero: [{value: null, disabled: true}, Validators.required],
-				genero: [null, Validators.required],
-				edad: [{value: null, disabled: true}, Validators.required],
-				fechaNacimiento: [null, Validators.required],
-				calle: [null, Validators.required],
-				desFachada: [null, Validators.required],
-				numeroInterior: [null, Validators.required],
-				numeroExterior: [null, Validators.required],
-				fotografiaRegsitro: [null, Validators.required],
-				actaDeNacimiento: [null, Validators.required],
-				curpArchivo: [null, Validators.required],
-				comprobanteDomicilio: [null, Validators.required],
-				idPlantel: [null],
-				plantel: [null],
-				idCarrera: [null],
-				carrera: [null]
-			}, {
+			],
+			curp: [null, Validators.required],
+			password: [null, [Validators.required,
+			Validation.containUpper(),
+			Validation.containLoweer(),
+			Validation.containUpper(),
+			Validation.containNumber(),
+			Validation.containSpecialCaracter(),
+			Validators.minLength(8)]],
+			passwordComfirm: [null, Validators.required],
+			idEstatus: [null, Validators.required],
+			idPerfil: [null, Validators.required],
+			idEstado: [null, Validators.required],
+			estado: [null, Validators.required],
+			idMunicipio: [null, Validators.required],
+			municipio: [null, Validators.required],
+			idAsentamiento: [null, Validators.required],
+			asentamiento: [null, Validators.required],
+			desGenero: [{ value: null, disabled: true }, Validators.required],
+			genero: [null, Validators.required],
+			edad: [{ value: null, disabled: true }, Validators.required],
+			fechaNacimiento: [null, Validators.required],
+			calle: [null, Validators.required],
+			desFachada: [null, Validators.required],
+			numeroInterior: [null, Validators.required],
+			numeroExterior: [null, Validators.required],
+			fotografiaRegsitro: [null, Validators.required],
+			actaDeNacimiento: [null, Validators.required],
+			curpArchivo: [null, Validators.required],
+			comprobanteDomicilio: [null, Validators.required],
+			idPlantel: [null],
+			plantel: [null],
+			idCarrera: [null],
+			carrera: [null]
+		}, {
 
-				validators: [Validation.match('password', 'passwordComfirm')]
-			}
+			validators: [Validation.match('password', 'passwordComfirm')]
+		}
 		);
 		this.filtredEstados = this.form.controls['estado'].valueChanges.pipe(
 			startWith(''),
@@ -165,7 +165,9 @@ export class AltaUsuarioComponent implements OnInit {
 		);
 
 	}
-
+	mostrar() {
+		console.log(this.form.getRawValue());
+	}
 	onAsentamientoChange(event: any) {
 		const idAsentamiento = event.option.value;
 		const index = this.catalogoAsentamietno.findIndex(e => {
@@ -253,7 +255,7 @@ export class AltaUsuarioComponent implements OnInit {
 			} else {
 				console.log('agregando error')
 				this.form.controls['estado'].markAsTouched();
-				this.form.controls['estado'].setErrors({required: true})
+				this.form.controls['estado'].setErrors({ required: true })
 			}
 		}
 	}
@@ -283,8 +285,8 @@ export class AltaUsuarioComponent implements OnInit {
 					if (response.disponible) {
 						this.isAvalibleNombreUsuario = true;
 						this.isAvalibleNombreUsuario = true;
-						this.form.controls['correo'].setErrors({'emailAvalibleError': null})
-						this.form.controls['nombreUsuario'].setErrors({'usernameAvalibleError': null})
+						this.form.controls['correo'].setErrors({ 'emailAvalibleError': null })
+						this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': null })
 						this.isLoading = true
 						this.usuarioService.guardar(formData, fotoRegistro, curp, actaNacimineto, comprobante).subscribe(
 							(response: any) => {
@@ -299,7 +301,7 @@ export class AltaUsuarioComponent implements OnInit {
 									if (res.isConfirmed) {
 										this.form.reset();
 									} else {
-										this.router.navigate(['../'], {relativeTo: this.route});
+										this.router.navigate(['../'], { relativeTo: this.route });
 									}
 								})
 							}, (error: HttpErrorResponse) => {
@@ -316,10 +318,10 @@ export class AltaUsuarioComponent implements OnInit {
 						this.isAvalibleCorreo = response.isCorreoDisponible;
 						this.isAvalibleNombreUsuario = response.isUsernameDisponible;
 						if (!this.isAvalibleCorreo) {
-							this.form.controls['correo'].setErrors({'emailAvalibleError': true})
+							this.form.controls['correo'].setErrors({ 'emailAvalibleError': true })
 						}
 						if (!this.isAvalibleNombreUsuario) {
-							this.form.controls['nombreUsuario'].setErrors({'usernameAvalibleError': true})
+							this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': true })
 						}
 					}
 				}, (error: HttpErrorResponse) => {
@@ -336,12 +338,12 @@ export class AltaUsuarioComponent implements OnInit {
 	onGeneroChange() {
 		const genero = this.form.controls['genero'].value;
 		switch (genero) {
-			case '3' :
+			case '3':
 				this.form.controls['desGenero'].addValidators(Validators.required);
 				this.form.controls['desGenero'].setValue('');
 				this.form.controls['desGenero'].enable();
 				break;
-			default :
+			default:
 				const index = this.catalogoGenero.findIndex(g => {
 					return g.value == genero
 				});

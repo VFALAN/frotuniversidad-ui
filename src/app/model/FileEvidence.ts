@@ -1,5 +1,5 @@
 export class FileEvidence {
-	file!: File | undefined;
+	file!: File | null;
 	nombre!: string;
 	path!: string;
 	id!: number;

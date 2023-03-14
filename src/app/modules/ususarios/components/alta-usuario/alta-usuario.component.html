@@ -391,14 +391,7 @@
 							<mat-label>
 								Fotografia
 							</mat-label>
-
-							<ngx-mat-file-input accept=".png, .jpg, .jpeg" [multiple]="false"
-								formControlName="fotografiaRegsitro">
-							</ngx-mat-file-input>
-							<button matSuffix mat-icon-button (click)="showCamera=true" data-bs-toggle="modal"
-								data-bs-target="#exampleModal">
-								<mat-icon>photo_camera</mat-icon>
-							</button>
+							<ngx-file-evidence  formControlName="fotografiaRegsitro"></ngx-file-evidence>
 							<mat-error
 								*ngIf="f['fotografiaRegsitro'].hasError('required') && (f['fotografiaRegsitro'].touched || f['fotografiaRegsitro'].dirty)">
 								*Campo Requerido
@@ -409,7 +402,7 @@
 					<div class="justify-content-center d-flex  pt-2 col-3">
 						<mat-form-field>
 							<mat-label>Curp</mat-label>
-							<ngx-mat-file-input formControlName="curpArchivo" [multiple]="false"
+							<ngx-mat-file-input  formControlName="curpArchivo" [multiple]="false"
 								accept=".png,.jpg,.jpeg,.pdf">
 
 							</ngx-mat-file-input>
@@ -454,26 +447,4 @@
 <!-- Button trigger modal -->
 
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Captura de fotografía </h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<div class="justify-content-center">
-					<webcam *ngIf="showCamera" [width]="480" [trigger]="trigger" (imageCapture)="handleImage($event)"
-						(initError)="handlerInitError($event)"></webcam>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button #btnCloseModal type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-					(click)="showCamera=false">Cancelar
-				</button>
-				<button type="button" (click)="triggerSnapshot()" class="btn btn-primary">Capturar</button>
-			</div>
-		</div>
-	</div>
-</div>
+<div><button (click)="mostrar()">ver</button></div>

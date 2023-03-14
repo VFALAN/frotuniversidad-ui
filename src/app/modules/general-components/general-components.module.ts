@@ -17,7 +17,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { WebcamModule } from 'ngx-webcam';
 import { NgxSuxCameraComponent } from './ngx-sux-camera/ngx-sux-camera.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
 	declarations: [
@@ -38,6 +38,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 		MatFormFieldModule,
 		MatInputModule,
 		MatTooltipModule,
+		FormsModule,
 		WebcamModule,
 		MatDialogModule,
 		ReactiveFormsModule],
