@@ -388,8 +388,9 @@
 							<mat-label>
 								Fotografia
 							</mat-label>
-							<ngx-file-evidence formControlName="fotografiaRegsitro">
-							</ngx-file-evidence>
+
+							<ngx-file-evidence  formControlName="fotografiaRegsitro"></ngx-file-evidence>
+
 							<mat-error
 								*ngIf="f['fotografiaRegsitro'].hasError('required') && (f['fotografiaRegsitro'].touched || f['fotografiaRegsitro'].dirty)">
 								*Campo Requerido
@@ -400,7 +401,9 @@
 					<div class="justify-content-center d-flex  pt-2 col-3">
 						<mat-form-field>
 							<mat-label>Curp</mat-label>
+
 							<ngx-file-evidence formControlName="curpArchivo"></ngx-file-evidence>
+
 							<mat-error
 								*ngIf="f['curpArchivo'].hasError('required') && (f['curpArchivo'].touched || f['curpArchivo'].dirty)">
 								Campo Requerido
@@ -439,3 +442,4 @@
 	</mat-card>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
+

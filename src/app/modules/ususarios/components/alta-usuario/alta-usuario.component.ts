@@ -16,6 +16,7 @@ import { SnackService } from '../../../../services/snack.service';
 import { TypeSnakBar } from '../../../../utils/TypeSnakBar.enum';
 import { FileEvidence } from '../../../../model/FileEvidence';
 
+
 @Component({
 	selector: 'app-alta-usuario',
 	templateUrl: './alta-usuario.component.html',
@@ -113,7 +114,9 @@ export class AltaUsuarioComponent implements OnInit {
 		);
 
 	}
-
+	mostrar() {
+		console.log(this.form.getRawValue());
+	}
 	onAsentamientoChange(event: any) {
 		const idAsentamiento = event.option.value;
 		const index = this.catalogoAsentamietno.findIndex(e => {
@@ -278,11 +281,19 @@ export class AltaUsuarioComponent implements OnInit {
 			this.usuarioService.validarUsuario(formData.nombreUsuario, formData.correo).subscribe({
 				next: (response: any) => {
 					if (response.disponible) {
+
 						this.guardarUsuario(formData, fotoRegistro.file, curp.file, actaNacimineto.file, comprobante.file);
+
 					} else {
 						this.isAvalibleCorreo = response.isCorreoDisponible;
 						this.isAvalibleNombreUsuario = response.isUsernameDisponible;
 						if (!this.isAvalibleCorreo) {
+
+							this.form.controls['correo'].setErrors({ 'emailAvalibleError': true })
+						}
+						if (!this.isAvalibleNombreUsuario) {
+							this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': true })
+
 							this.form.controls['correo'].setErrors({ 'emailAvalibleError': true });
 						}
 						if (!this.isAvalibleNombreUsuario) {

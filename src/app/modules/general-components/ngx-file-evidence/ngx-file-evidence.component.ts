@@ -29,7 +29,7 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 	readonly EXTENCIONES_IMAGENES = 'image/*';
 	readonly ALL_EXTENCIONS = '*/*'
 	readonly IMAGENES = ['jpg', 'png', 'gif', 'svg', 'bmp']
-	form !: FormGroup;
+	_value !: FileEvidence | null;
 
 
 	@ViewChild(MatInput, { read: ElementRef, static: true })
@@ -79,8 +79,20 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 	}
 
 	private _required = false;
+
+
+
 	@Input()
-	disabled!: boolean;
+	get disabled() {
+		return this._disabled
+	}
+
+	set disabled(dis) {
+		this._disabled = coerceBooleanProperty(dis);
+		this.stateChanges.next();
+	}
+
+	private _disabled!: boolean;
 
 
 	controlType!: string | undefined;
@@ -119,26 +131,14 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 		if (this.ngControl != null) {
 			this.ngControl.valueAccessor = this;
 		}
-		this.form = fb.group({
-			id: [''],
-			file: [''],
-			selectedFile: [''],
-			nombre: ['', [Validators.required]],
-			path: [''],
-			mineType: [''],
-			downloadUrl: [''],
-			extencion: [''],
-			data: [''],
-			tipoArchivo: [''],
-			type: ['']
-		});
+
 	}
 
 
 
 	get errorState(): boolean {
 
-		return this.form.invalid && this.touched
+		return this.touched && this._value == null;
 	}
 	ngOnInit(): void {
 		this.focusMonitor.monitor(this.input).subscribe(
@@ -148,9 +148,7 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 		this.focusMonitor.monitor(this.input).pipe(take(1)).subscribe(() => {
 			this.onTouch();
 		})
-		this.form.valueChanges.subscribe((value) => {
-			this.onChange(value)
-		})
+
 		this.validarCamera();
 		this.checkButtons();
 	}
@@ -161,28 +159,26 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 
 
 	get value() {
-		return this.form.value
+		return this._value
 	}
 	@Input()
 	set value(v: FileEvidence | null) {
-		if (v instanceof FileEvidence) {
-			this.form.patchValue(v)
-		}
-		this.onChange(v)
-		this.onTouch(v)
+		this._value = v;
+		this.onChange(v);
+		this.onTouch(v);
 	}
 
 
 	get placeHolder() {
-		return this._placeholder
+		return this._placeholder;
 	}
 	@Input()
 	set placeholder(placeHolder: string) {
-		this._placeholder = placeHolder
-		this.stateChanges.next()
+		this._placeholder = placeHolder;
+		this.stateChanges.next();
 	}
 	get empty(): boolean {
-		return this.form.invalid
+		return this._value === null;
 	}
 
 	setDescribedByIds(ids: string[]): void {
@@ -197,15 +193,15 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 
 
 	download() {
-		if (this.form.valid) {
+		if (this._value !== null) {
 
-			this._http.get(this.form.controls['downloadUrl'].value, { responseType: 'arraybuffer' }).subscribe({
+			this._http.get(this._value.downloadUrl, { responseType: 'arraybuffer' }).subscribe({
 				next: (response) => {
 					this.preview();
-					console.log(this.form.getRawValue())
-					const blob = new Blob([response], { type: this.form.controls['mineType'].value })
+
+					const blob = new Blob([response], { type: this._value?.type })
 					console.log(blob);
-					saveAs(blob, this.form.controls['nombre'].value);
+					saveAs(blob, this._value?.nombre);
 				},
 				error: (error) => {
 					console.error(error)
@@ -214,11 +210,11 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 		}
 	}
 	dropFile(): void {
-		if (this.form.valid) {
-			if (this.form.controls['id'].value != null) {
+		if (this._value !== null) {
+			if (this._value.id != null) {
 				Swal.fire({
 					title: 'Confirmar Eliminación',
-					text: `Esta Seguro de eliminar el archivo: ${this.form.controls['nombre'].value} no podra ser recuperado más adelante`,
+					text: `Esta Seguro de eliminar el archivo: ${this._value.nombre} no podra ser recuperado más adelante`,
 					showCancelButton: true,
 					confirmButtonText: 'Eliminar el Archivo',
 					cancelButtonText: 'Cancelar'
@@ -229,31 +225,22 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 					this.stateChanges.next();
 				})
 			} else {
-				this.cleanForm();
+				this._empty = true;
+				this._value.nombre = '';
+				this._value.file = null;
 			}
 		}
+		this._value = null
 		this.stateChanges.next();
-	}
-	private cleanForm() {
-		this.form.controls['file'].setValue(null)
-		this.form.controls['nombre'].enable();
-		this.form.controls['nombre'].setValue('');
-		this.form.controls['nombre'].setValidators(Validators.required)
 		this.checkButtons();
-		this.ngOnInit();
 	}
+
 	disableFile(): void {
-		if (this.form.valid) {
-			if (this.form.controls['id'].value != undefined && this.form.controls['id'].value != null) {
-				this.archivoService.disabledFile(this.form.controls['id'].value).subscribe({
+		if (this._value !== null) {
+			if (this._value.id != undefined && this._value.id != null) {
+				this.archivoService.disabledFile(this._value.id).subscribe({
 					next: (res) => {
-						this.archivoService.disabledFile(this.form.controls['id'].value).subscribe({
-							next: (response => {
-								this.cleanForm();
-							}),
-							error: (error => { console.log(error) }),
-							complete: () => { }
-						})
+						// se desactivo el archivo
 					}, error: (err) => { console.log(err) }, complete: () => {
 						console.log('se completo la peticion')
 						this.checkButtons();
@@ -264,11 +251,7 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 	}
 
 	writeValue(obj: any): void {
-		console.log(obj)
-		if (obj != null) {
-			this.form.patchValue(obj);
-			this.form.controls['nombre'].value != '' ? this.form.controls['nombre'].disable() : this.form.controls['nombre'].enable();
-		}
+		this._value = obj;
 		this.checkButtons();
 		this.stateChanges.next();
 	}
@@ -279,23 +262,22 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 		this.onTouch = fn;
 	}
 	setDisabledState?(isDisabled: boolean): void {
-		this.disabled = isDisabled;
-		this.form.disable();
+		this._disabled = isDisabled;
 	}
 	preview() {
 		Swal.fire({
-			imageUrl: this.form.controls['downloadUrl'].value,
+			imageUrl: this._value?.downloadUrl,
 			imageHeight: 500
 		})
 	}
 	checkButtons(): void {
 		const is_image_enable = this.accept.includes(this.EXTENCIONES_IMAGENES) || this.accept == this.ALL_EXTENCIONS;
-		if (this.form.valid) {
+		if (this._value != null) {
 
 			this.enableSelectFile = false;
 			this.enableCamera = false;
 			this.enableDropFile = true;
-			this.enableDownload = this.form.controls['downloadUrl'].value != null || this.form.controls['downloadUrl'].value.includes('http')
+			this.enableDownload = this._value.downloadUrl != null;
 			this.enablePreView = this.validPreview();
 		} else {
 
@@ -311,9 +293,10 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 
 		if (this.enableCamera && this.hasCameraEnable) {
 			const dialogCameraRef = this.dialog.open(NgxSuxCameraComponent, { data: {} })
-			dialogCameraRef.afterClosed().subscribe(result => {
+			dialogCameraRef.afterClosed().subscribe((result: File) => {
+				this._value = new FileEvidence();
 				if (result) {
-					this.form.controls['extencion'].setValue('png');
+					this._value.extencion = '.png'
 					const fileList = [result];
 					this.touched = true;
 					this.selectionFile(fileList);
@@ -327,16 +310,16 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 		console.log({ file })
 		const tmpFileEvicende = {
 			nombre: file.name,
-			type: file.type
+			type: file.type,
+			file
 		}
-		this.form.controls['file'].setValue(file)
 		this.writeValue(tmpFileEvicende)
 		this.onChange(tmpFileEvicende)
 	}
 	private validPreview(): boolean {
 		let isEnable = false;
-		if (this.form.valid && this.form.controls['extencion'].value != null && this.form.controls['downloadUrl'].value != '') {
-			const extencion: string = this.form.controls['extencion'].value;
+		if (this._value !== null && this._value.extencion != null && this._value.downloadUrl != null) {
+			const extencion: string = this._value.extencion;
 			this.IMAGENES.forEach(i => {
 				if (extencion.includes(i) || i === extencion) {
 					isEnable = true;
