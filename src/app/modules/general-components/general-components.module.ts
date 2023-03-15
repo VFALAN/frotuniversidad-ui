@@ -1,3 +1,4 @@
+import { LoadingInterceptor } from './../../interceptors/loading.interceptor';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from './loading/loading.component';
@@ -8,7 +9,7 @@ import { MatBadgeModule } from "@angular/material/badge";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatButtonModule } from "@angular/material/button";
 import { NotificacionService } from "../../services/notificacion.service";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatListModule } from "@angular/material/list";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -54,7 +55,9 @@ import { SnackService } from '../../services/snack.service';
 		NgxSuxCameraComponent
 	], providers: [
 		NotificacionService,
-		SnackService
+		SnackService, {
+			provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+		}
 	]
 })
 export class GeneralComponentsModule {

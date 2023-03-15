@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {NG_VALUE_ACCESSOR} from "@angular/forms";
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-loading',
@@ -9,7 +10,7 @@ import {NG_VALUE_ACCESSOR} from "@angular/forms";
 })
 export class LoadingComponent implements OnInit {
 
-  constructor() { }
+  constructor(public _loader : LoadingService) { }
 
   ngOnInit(): void {
   }

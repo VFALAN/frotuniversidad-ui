@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-eslint/schematics": "^1.0.0",
     "@angular-material-components/file-input": "^8.0.0",
     "@angular/animations": "^14.2.0",
     "@angular/cdk": "^14.2.4",
