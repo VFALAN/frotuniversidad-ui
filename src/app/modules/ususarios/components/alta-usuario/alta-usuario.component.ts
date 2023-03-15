@@ -26,7 +26,6 @@ export class AltaUsuarioComponent implements OnInit {
 	@ViewChild('btnCloseModal', { static: false })
 	bntCloseModal !: ElementRef;
 	hasCamera: boolean = false;
-	isLoading = false;
 	startDate = new Date(1980, 0, 1);
 	hidePassword = true;
 	hideConfirmPasswod = true;
@@ -128,7 +127,7 @@ export class AltaUsuarioComponent implements OnInit {
 	}
 
 	onPlantelChange(event: any) {
-		this.isLoading = true;
+
 		const idPlantel = event.option.value;
 		const index = this.catalogoPlanteles.findIndex(p => {
 			return p.value == idPlantel
@@ -140,9 +139,7 @@ export class AltaUsuarioComponent implements OnInit {
 			next: (response: ComboDTO[]) =>
 				this.catalogoCarreras = response,
 			error: (error: HttpErrorResponse) =>
-				this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error),
-			complete: () =>
-				this.isLoading = false
+				this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error)
 		})
 	}
 
@@ -151,7 +148,6 @@ export class AltaUsuarioComponent implements OnInit {
 	}
 
 	onEstadoChange(event: any) {
-
 		const idEstado = event.option.value;
 		const index = this.catalogoEstados.findIndex(e => {
 			return e.value == idEstado
@@ -159,7 +155,6 @@ export class AltaUsuarioComponent implements OnInit {
 		const estado = this.catalogoEstados[index]
 		this.form.controls['idEstado'].setValue(estado.value);
 		this.form.controls['estado'].setValue(estado.label);
-		this.isLoading = true
 		this.catalogoService.getMunicipios(idEstado)
 			.subscribe({
 				next: (response: ComboDTO[]) => {
@@ -172,9 +167,7 @@ export class AltaUsuarioComponent implements OnInit {
 					);
 				},
 				error: (error: HttpErrorResponse) =>
-					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error),
-				complete: () =>
-					this.isLoading = false
+					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error)
 			});
 		if (this.form.controls['idPerfil'] != null) {
 			this.loadPlanteles(this.f['idEstado'].value);
@@ -184,7 +177,7 @@ export class AltaUsuarioComponent implements OnInit {
 
 
 	onMunicipioChange(event: any): void {
-		this.isLoading = true
+
 		const idMunicipio = event.option.value;
 		const index = this.catalgoMunicipios.findIndex(e => {
 			return e.value == idMunicipio
@@ -204,8 +197,7 @@ export class AltaUsuarioComponent implements OnInit {
 			}),
 			error: (error: HttpErrorResponse) =>
 				this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error)
-			, complete: () =>
-				this.isLoading = false
+
 		},)
 	}
 
@@ -232,14 +224,13 @@ export class AltaUsuarioComponent implements OnInit {
 			)
 		}, (error: HttpErrorResponse) => {
 			console.log(error.message);
-		}, () => this.isLoading = false)
+		})
 	}
 	private guardarUsuario(pFormData: UsuarioDTO, pFotoRegistro: File, pCurp: File, pActaNacimiento: File, pComprobante: File): void {
 		this.isAvalibleNombreUsuario = true;
 		this.isAvalibleNombreUsuario = true;
 		this.form.controls['correo'].setErrors({ 'emailAvalibleError': null });
 		this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': null });
-		this.isLoading = true;
 		this.usuarioService.guardar(pFormData, pFotoRegistro, pCurp, pActaNacimiento, pComprobante).subscribe(
 			{
 				next: () => {
@@ -259,11 +250,7 @@ export class AltaUsuarioComponent implements OnInit {
 					})
 				},
 				error: (error: HttpErrorResponse) =>
-					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error),
-				complete: () =>
-					this.isLoading = false
-
-
+					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error)
 			}
 		)
 	}
@@ -277,7 +264,6 @@ export class AltaUsuarioComponent implements OnInit {
 		console.log({ fotoRegistro }, { curp })
 		if (this.form.valid) {
 			const formData: UsuarioDTO = this.form.getRawValue();
-			this.isLoading = true;
 			this.usuarioService.validarUsuario(formData.nombreUsuario, formData.correo).subscribe({
 				next: (response: any) => {
 					if (response.disponible) {
@@ -289,10 +275,7 @@ export class AltaUsuarioComponent implements OnInit {
 					}
 				},
 				error: (error: HttpErrorResponse) =>
-					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error),
-				complete: () =>
-					this.isLoading = false
-
+					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error)
 			}
 			)
 		}
@@ -316,21 +299,20 @@ export class AltaUsuarioComponent implements OnInit {
 	}
 	onGeneroChange() {
 		const genero = this.form.controls['genero'].value;
-		switch (genero) {
-			case '3':
-				this.form.controls['desGenero'].addValidators(Validators.required);
-				this.form.controls['desGenero'].setValue('');
-				this.form.controls['desGenero'].enable();
-				break;
-			default:
-				const index = this.catalogoGenero.findIndex(g => {
-					return g.value == genero;
-				});
-
-				this.form.controls['desGenero'].setValue(this.catalogoGenero[index].label);
-				this.form.controls['desGenero'].disable();
-				break;
+		if (genero === '3') {
+			this.form.controls['desGenero'].addValidators(Validators.required);
+			this.form.controls['desGenero'].setValue('');
+			this.form.controls['desGenero'].enable();
 		}
+		else {
+			const index = this.catalogoGenero.findIndex(g => {
+				return g.value == genero;
+			});
+
+			this.form.controls['desGenero'].setValue(this.catalogoGenero[index].label);
+			this.form.controls['desGenero'].disable();
+		}
+
 	}
 
 
