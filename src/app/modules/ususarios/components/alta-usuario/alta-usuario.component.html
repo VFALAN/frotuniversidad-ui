@@ -4,13 +4,10 @@
 			<app-menu>
 			</app-menu>
 		</div>
-		<div class=" pt-2 col-12 d-flex justify-content-start">
-			<div>
-				<button [routerLink]="'../'" class="btn btn-success">
-					<mat-icon>arrow_back</mat-icon>
-					regresar
-				</button>
-			</div>
+		<div class="mx-2 pt-2 col-1 d-flex justify-content-start">
+			<button mat-button [routerLink]="'../'" class="btn btn-success">
+				<mat-icon>arrow_back</mat-icon>
+			</button>
 		</div>
 	</div>
 	<mat-card class="pt-2">
@@ -391,7 +388,9 @@
 							<mat-label>
 								Fotografia
 							</mat-label>
+
 							<ngx-file-evidence  formControlName="fotografiaRegsitro"></ngx-file-evidence>
+
 							<mat-error
 								*ngIf="f['fotografiaRegsitro'].hasError('required') && (f['fotografiaRegsitro'].touched || f['fotografiaRegsitro'].dirty)">
 								*Campo Requerido
@@ -402,10 +401,9 @@
 					<div class="justify-content-center d-flex  pt-2 col-3">
 						<mat-form-field>
 							<mat-label>Curp</mat-label>
-							<ngx-mat-file-input  formControlName="curpArchivo" [multiple]="false"
-								accept=".png,.jpg,.jpeg,.pdf">
 
-							</ngx-mat-file-input>
+							<ngx-file-evidence formControlName="curpArchivo"></ngx-file-evidence>
+
 							<mat-error
 								*ngIf="f['curpArchivo'].hasError('required') && (f['curpArchivo'].touched || f['curpArchivo'].dirty)">
 								Campo Requerido
@@ -415,7 +413,7 @@
 					<div class="justify-content-center d-flex  pt-2 col-3">
 						<mat-form-field>
 							<mat-label>Acta de nacimineto</mat-label>
-							<ngx-mat-file-input formControlName="actaDeNacimiento"></ngx-mat-file-input>
+							<ngx-file-evidence formControlName="actaDeNacimiento"></ngx-file-evidence>
 							<mat-error
 								*ngIf="f['actaDeNacimiento'].hasError('required') && (f['actaDeNacimiento'].touched || f['actaDeNacimiento'].dirty)">
 								Campo Requerido
@@ -425,7 +423,7 @@
 					<div class="justify-content-center d-flex  pt-2 col-3">
 						<mat-form-field>
 							<mat-label>Comprobante de domicilio</mat-label>
-							<ngx-mat-file-input formControlName="comprobanteDomicilio"></ngx-mat-file-input>
+							<ngx-file-evidence formControlName="comprobanteDomicilio"></ngx-file-evidence>
 							<mat-error
 								*ngIf="f['comprobanteDomicilio'].hasError('required') && (f['comprobanteDomicilio'].touched || f['comprobanteDomicilio'].dirty)">
 								Campo Requerido
@@ -444,7 +442,4 @@
 	</mat-card>
 </div>
 <app-loading *ngIf="isLoading"></app-loading>
-<!-- Button trigger modal -->
 
-
-<div><button (click)="mostrar()">ver</button></div>

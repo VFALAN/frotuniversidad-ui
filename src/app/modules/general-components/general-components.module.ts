@@ -18,6 +18,9 @@ import { WebcamModule } from 'ngx-webcam';
 import { NgxSuxCameraComponent } from './ngx-sux-camera/ngx-sux-camera.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { SnackBarComponent } from './snack-bar/snack-bar.component';
+import { SnackService } from '../../services/snack.service';
+
 
 @NgModule({
 	declarations: [
@@ -25,7 +28,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 		NgxPhotograficComponent,
 		NgNotificationComponent,
 		NgxFileEvidenceComponent,
-		NgxSuxCameraComponent
+		NgxSuxCameraComponent,
+		SnackBarComponent
 	],
 	imports: [
 		CommonModule,
@@ -49,7 +53,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 		NgNotificationComponent,
 		NgxSuxCameraComponent
 	], providers: [
-		NotificacionService
+		NotificacionService,
+		SnackService
 	]
 })
 export class GeneralComponentsModule {
