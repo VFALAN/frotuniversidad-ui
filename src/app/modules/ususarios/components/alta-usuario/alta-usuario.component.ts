@@ -242,10 +242,10 @@ export class AltaUsuarioComponent implements OnInit {
 		this.isLoading = true;
 		this.usuarioService.guardar(pFormData, pFotoRegistro, pCurp, pActaNacimiento, pComprobante).subscribe(
 			{
-				next: (response: any) => {
+				next: () => {
 					Swal.fire({
 						title: 'USUARIO GUARDADO',
-						text: `El Usuario ${response.id} se dio de alta correotamente.`,
+						text: `El Usuario se dio de alta correctamente.`,
 						icon: 'success',
 						confirmButtonText: 'Capturar Nuevo Usuario',
 						showCancelButton: true,
@@ -285,21 +285,7 @@ export class AltaUsuarioComponent implements OnInit {
 						this.guardarUsuario(formData, fotoRegistro.file, curp.file, actaNacimineto.file, comprobante.file);
 
 					} else {
-						this.isAvalibleCorreo = response.isCorreoDisponible;
-						this.isAvalibleNombreUsuario = response.isUsernameDisponible;
-						if (!this.isAvalibleCorreo) {
-
-							this.form.controls['correo'].setErrors({ 'emailAvalibleError': true })
-						}
-						if (!this.isAvalibleNombreUsuario) {
-							this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': true })
-
-							this.form.controls['correo'].setErrors({ 'emailAvalibleError': true });
-						}
-						if (!this.isAvalibleNombreUsuario) {
-							this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': true });
-						}
-						this._snakeBarService.openSnackBar('El nombre de usuario o  correo no esta disponible', TypeSnakBar.error);
+						this.writeError(response)
 					}
 				},
 				error: (error: HttpErrorResponse) =>
@@ -311,7 +297,23 @@ export class AltaUsuarioComponent implements OnInit {
 			)
 		}
 	}
+	writeError(response: any): void {
+		this.isAvalibleCorreo = response.isCorreoDisponible;
+		this.isAvalibleNombreUsuario = response.isUsernameDisponible;
+		if (!this.isAvalibleCorreo) {
 
+			this.form.controls['correo'].setErrors({ 'emailAvalibleError': true })
+		}
+		if (!this.isAvalibleNombreUsuario) {
+			this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': true })
+
+			this.form.controls['correo'].setErrors({ 'emailAvalibleError': true });
+		}
+		if (!this.isAvalibleNombreUsuario) {
+			this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': true });
+		}
+		this._snakeBarService.openSnackBar('El nombre de usuario o  correo no esta disponible', TypeSnakBar.error);
+	}
 	onGeneroChange() {
 		const genero = this.form.controls['genero'].value;
 		switch (genero) {
