@@ -1,19 +1,20 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {ComboDTO} from "../../../../model/combo-dto";
-import {CatalogoEstadosService} from "../../../../services/catalogo-estados.service";
-import {UsuarioService} from "../../services/usuario.service";
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CATALOGO_ESTATUS, CATALOGO_GENERO, CATALOGO_PERFILES} from "../../../../utils/Catalogos";
-import {MatDatepickerInputEvent} from "@angular/material/datepicker";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
+import { ComboDTO } from "../../../../model/combo-dto";
+import { CatalogoEstadosService } from "../../../../services/catalogo-estados.service";
+import { UsuarioService } from "../../services/usuario.service";
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CATALOGO_ESTATUS, CATALOGO_GENERO, CATALOGO_PERFILES } from "../../../../utils/Catalogos";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import * as moment from "moment";
-import {map, Observable, startWith, Subject} from "rxjs";
-import {HttpErrorResponse} from "@angular/common/http";
+import { map, Observable, startWith, Subject } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
 import Validation from "../../../../utils/Validation";
 import Swal from 'sweetalert2'
-import {UsuarioDTO} from "../../model/usuario-dto";
-import {WebcamImage, WebcamInitError} from "ngx-webcam";
-import {baseUrlDataToFile} from "../../../../utils/FileUtils";
+import { UsuarioDTO } from "../../model/usuario-dto";
+import { SnackService } from '../../../../services/snack.service';
+import { TypeSnakBar } from '../../../../utils/TypeSnakBar.enum';
+import { FileEvidence } from '../../../../model/FileEvidence';
 
 @Component({
 	selector: 'app-alta-usuario',
@@ -21,7 +22,7 @@ import {baseUrlDataToFile} from "../../../../utils/FileUtils";
 	styleUrls: ['./alta-usuario.component.sass']
 })
 export class AltaUsuarioComponent implements OnInit {
-	@ViewChild('btnCloseModal', {static: false})
+	@ViewChild('btnCloseModal', { static: false })
 	bntCloseModal !: ElementRef;
 	hasCamera: boolean = false;
 	isLoading = false;
@@ -43,63 +44,13 @@ export class AltaUsuarioComponent implements OnInit {
 	catalogoEstaus: ComboDTO[] = CATALOGO_ESTATUS;
 	catalogoCarreras: ComboDTO[] = [];
 	form !: FormGroup;
-	showCamera: boolean = false;
-	trigger: Subject<void> = new Subject();
-	webcamImage!: WebcamImage;
-	nextWebcam: Subject<void> = new Subject();
-
-	captureImage = ''
-
-	public triggerSnapshot(): void {
-
-		this.trigger.next();
-
-	}
-
-	public handleImage(webcamImage: WebcamImage): void {
-		const fechaStr = moment(new Date()).format('yyyy-MM-dd');
-		const titulo = 'FOTOGRAFIA_REGISTRO'
-		this.webcamImage = webcamImage;
-		Swal.fire({
-			title: 'Desea Usar Esta Fotografia',
-			imageUrl: webcamImage.imageAsDataUrl,
-			showCancelButton: true,
-			confirmButtonText: 'Si, Guardar',
-			cancelButtonText: 'Tomar Otra Foto'
-		}).then((res) => {
-			if (res.isConfirmed) {
-				this.captureImage = webcamImage!.imageAsDataUrl.split(',')[1];
-				const blob = new Blob([this.captureImage], {type: 'image/png'});
-				const file = baseUrlDataToFile(webcamImage.imageAsDataUrl, `${titulo}_${fechaStr}.png`, 'image/png');
-				this.form.controls['fotografiaRegsitro'].setValue(file);
-				this.showCamera = false;
-				this.bntCloseModal.nativeElement.click();
-			} else {
-				this.showCamera = true;
-
-			}
-		})
-
-
-	}
-
-	public get triggerObservable(): Observable<any> {
-
-		return this.trigger.asObservable();
-
-	}
-
-	public get nextWebcamObservable(): Observable<any> {
-
-		return this.nextWebcam.asObservable();
-
-	}
 
 	constructor(private route: ActivatedRoute,
-				private router: Router,
-				private catalogoService: CatalogoEstadosService,
-				private usuarioService: UsuarioService,
-				private fb: FormBuilder) {
+		private router: Router,
+		private catalogoService: CatalogoEstadosService,
+		private usuarioService: UsuarioService,
+		private _snakeBarService: SnackService,
+		private fb: FormBuilder) {
 	}
 
 	ngOnInit(): void {
@@ -109,55 +60,52 @@ export class AltaUsuarioComponent implements OnInit {
 
 	initForm(): void {
 		this.form = this.fb.group({
-				apellidoPaterno: [null, Validators.required],
-				apellidoMaterno: [null, Validators.required],
-				nombre: [null, Validators.required],
-				correo: [null, [Validators.required, Validators.email,
-					Validation.emailAvalible(this.isAvalibleCorreo)]
-
-				],
-				nombreUsuario: [null, [Validators.required,
-					Validation.usernameAvalible(this.isAvalibleNombreUsuario)
-				],
-
-				],
-				curp: [null, Validators.required],
-				password: [null, [Validators.required,
-					Validation.containUpper(),
-					Validation.containLoweer(),
-					Validation.containUpper(),
-					Validation.containNumber(),
-					Validation.containSpecialCaracter(),
-					Validators.minLength(8)]],
-				passwordComfirm: [null, Validators.required],
-				idEstatus: [null, Validators.required],
-				idPerfil: [null, Validators.required],
-				idEstado: [null, Validators.required],
-				estado: [null, Validators.required],
-				idMunicipio: [null, Validators.required],
-				municipio: [null, Validators.required],
-				idAsentamiento: [null, Validators.required],
-				asentamiento: [null, Validators.required],
-				desGenero: [{value: null, disabled: true}, Validators.required],
-				genero: [null, Validators.required],
-				edad: [{value: null, disabled: true}, Validators.required],
-				fechaNacimiento: [null, Validators.required],
-				calle: [null, Validators.required],
-				desFachada: [null, Validators.required],
-				numeroInterior: [null, Validators.required],
-				numeroExterior: [null, Validators.required],
-				fotografiaRegsitro: [null, Validators.required],
-				actaDeNacimiento: [null, Validators.required],
-				curpArchivo: [null, Validators.required],
-				comprobanteDomicilio: [null, Validators.required],
-				idPlantel: [null],
-				plantel: [null],
-				idCarrera: [null],
-				carrera: [null]
-			}, {
-
-				validators: [Validation.match('password', 'passwordComfirm')]
-			}
+			apellidoPaterno: [null, Validators.required],
+			apellidoMaterno: [null, Validators.required],
+			nombre: [null, Validators.required],
+			correo: [null, [Validators.required, Validators.email,
+			Validation.emailAvalible(this.isAvalibleCorreo)]
+			],
+			nombreUsuario: [null, [Validators.required,
+			Validation.usernameAvalible(this.isAvalibleNombreUsuario)
+			],
+			],
+			curp: [null, Validators.required],
+			password: [null, [Validators.required,
+			Validation.containUpper(),
+			Validation.containLoweer(),
+			Validation.containUpper(),
+			Validation.containNumber(),
+			Validation.containSpecialCaracter(),
+			Validators.minLength(8)]],
+			passwordComfirm: [null, Validators.required],
+			idEstatus: [null, Validators.required],
+			idPerfil: [null, Validators.required],
+			idEstado: [null, Validators.required],
+			estado: [null, Validators.required],
+			idMunicipio: [null, Validators.required],
+			municipio: [null, Validators.required],
+			idAsentamiento: [null, Validators.required],
+			asentamiento: [null, Validators.required],
+			desGenero: [{ value: null, disabled: true }, Validators.required],
+			genero: [null, Validators.required],
+			edad: [{ value: null, disabled: true }, Validators.required],
+			fechaNacimiento: [null, Validators.required],
+			calle: [null, Validators.required],
+			desFachada: [null, Validators.required],
+			numeroInterior: [null, Validators.required],
+			numeroExterior: [null, Validators.required],
+			fotografiaRegsitro: [null, Validators.required],
+			actaDeNacimiento: [null, Validators.required],
+			curpArchivo: [null, Validators.required],
+			comprobanteDomicilio: [null, Validators.required],
+			idPlantel: [null],
+			plantel: [null],
+			idCarrera: [null],
+			carrera: [null]
+		}, {
+			validators: [Validation.match('password', 'passwordComfirm')]
+		}
 		);
 		this.filtredEstados = this.form.controls['estado'].valueChanges.pipe(
 			startWith(''),
@@ -177,7 +125,7 @@ export class AltaUsuarioComponent implements OnInit {
 	}
 
 	onPlantelChange(event: any) {
-		this.isLoading = true
+		this.isLoading = true;
 		const idPlantel = event.option.value;
 		const index = this.catalogoPlanteles.findIndex(p => {
 			return p.value == idPlantel
@@ -185,13 +133,14 @@ export class AltaUsuarioComponent implements OnInit {
 		const plantel = this.catalogoPlanteles[index]
 		this.form.controls['plantel'].setValue(plantel.label);
 		this.form.controls['idPlantel'].setValue(idPlantel);
-		this.catalogoService.getCarreras(idPlantel).subscribe((response: ComboDTO[]) => {
-			this.catalogoCarreras = response
-		}, (error: HttpErrorResponse) => {
-			console.log(error.message);
-		}, () => {
-			this.isLoading = false
-		});
+		this.catalogoService.getCarreras(idPlantel).subscribe({
+			next: (response: ComboDTO[]) =>
+				this.catalogoCarreras = response,
+			error: (error: HttpErrorResponse) =>
+				this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error),
+			complete: () =>
+				this.isLoading = false
+		})
 	}
 
 	onCarreraChange(event: any) {
@@ -199,7 +148,7 @@ export class AltaUsuarioComponent implements OnInit {
 	}
 
 	onEstadoChange(event: any) {
-		this.isLoading = true
+
 		const idEstado = event.option.value;
 		const index = this.catalogoEstados.findIndex(e => {
 			return e.value == idEstado
@@ -207,23 +156,31 @@ export class AltaUsuarioComponent implements OnInit {
 		const estado = this.catalogoEstados[index]
 		this.form.controls['idEstado'].setValue(estado.value);
 		this.form.controls['estado'].setValue(estado.label);
-		this.catalogoService.getMunicipios(idEstado).subscribe((response) => {
-			this.catalgoMunicipios = response
-			this.filtredMunicipios = this.form.controls['municipio'].valueChanges.pipe(
-				startWith(''),
-				map(value => this._filter_Municipios(value || ''))
-			);
-		}, error => {
-			console.log(error.message)
-		}, () => {
-			this.isLoading = false
-		});
+		this.isLoading = true
+		this.catalogoService.getMunicipios(idEstado)
+			.subscribe({
+				next: (response: ComboDTO[]) => {
+					this.catalgoMunicipios = response
+					this.filtredMunicipios = this.form.controls['municipio'].valueChanges.pipe(
+						startWith(''),
+						map(value =>
+							this._filter_Municipios(value || '')
+						)
+					);
+				},
+				error: (error: HttpErrorResponse) =>
+					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error),
+				complete: () =>
+					this.isLoading = false
+			});
 		if (this.form.controls['idPerfil'] != null) {
 			this.loadPlanteles(this.f['idEstado'].value);
 		}
 	}
 
-	onMunicipioChange(event: any) {
+
+
+	onMunicipioChange(event: any): void {
 		this.isLoading = true
 		const idMunicipio = event.option.value;
 		const index = this.catalgoMunicipios.findIndex(e => {
@@ -232,18 +189,24 @@ export class AltaUsuarioComponent implements OnInit {
 		const municipio = this.catalgoMunicipios[index];
 		this.form.controls['municipio'].setValue(municipio.label);
 		this.form.controls['idMunicipio'].setValue(municipio.value);
-		this.catalogoService.getAsentamiento(idMunicipio).subscribe(((response: ComboDTO[]) => {
-			this.catalogoAsentamietno = response;
-			this.filtredAsentaminetos = this.form.controls['asentamiento'].valueChanges.pipe(
-				startWith(''),
-				map(value => this._filter_Asentaminetos(value || ''))
-			);
-		}), (error: HttpErrorResponse) => {
-			console.log(error.message)
-		}, () => this.isLoading = false)
+		this.catalogoService.getAsentamiento(idMunicipio).subscribe({
+			next: ((response: ComboDTO[]) => {
+				this.catalogoAsentamietno = response;
+				this.filtredAsentaminetos = this.form.controls['asentamiento'].valueChanges.pipe(
+					startWith(''),
+					map(value =>
+						this._filter_Asentaminetos(value || '')
+					)
+				);
+			}),
+			error: (error: HttpErrorResponse) =>
+				this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error)
+			, complete: () =>
+				this.isLoading = false
+		},)
 	}
 
-	onPerfilChange() {
+	onPerfilChange(): void {
 		const idPerfil = this.form.controls['idPerfil'].value;
 		if (idPerfil != 1) {
 			const idEstado = this.form.controls['idEstado'].value;
@@ -251,14 +214,13 @@ export class AltaUsuarioComponent implements OnInit {
 			if (idEstado != null) {
 				this.loadPlanteles(idEstado);
 			} else {
-				console.log('agregando error')
 				this.form.controls['estado'].markAsTouched();
-				this.form.controls['estado'].setErrors({required: true})
+				this.form.controls['estado'].setErrors({ required: true })
 			}
 		}
 	}
 
-	private loadPlanteles(idEstado: any) {
+	private loadPlanteles(idEstado: any): void {
 		this.catalogoService.getPlanteles(idEstado).subscribe((response: ComboDTO[]) => {
 			this.catalogoPlanteles = response;
 			this.filtredPlanteles = this.form.controls['plantel'].valueChanges.pipe(
@@ -269,81 +231,87 @@ export class AltaUsuarioComponent implements OnInit {
 			console.log(error.message);
 		}, () => this.isLoading = false)
 	}
+	private guardarUsuario(pFormData: UsuarioDTO, pFotoRegistro: File, pCurp: File, pActaNacimiento: File, pComprobante: File): void {
+		this.isAvalibleNombreUsuario = true;
+		this.isAvalibleNombreUsuario = true;
+		this.form.controls['correo'].setErrors({ 'emailAvalibleError': null });
+		this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': null });
+		this.isLoading = true;
+		this.usuarioService.guardar(pFormData, pFotoRegistro, pCurp, pActaNacimiento, pComprobante).subscribe(
+			{
+				next: (response: any) => {
+					Swal.fire({
+						title: 'USUARIO GUARDADO',
+						text: `El Usuario ${response.id} se dio de alta correotamente.`,
+						icon: 'success',
+						confirmButtonText: 'Capturar Nuevo Usuario',
+						showCancelButton: true,
+						cancelButtonText: 'Salir'
+					}).then(res => {
+						if (res.isConfirmed) {
+							this.form.reset();
+						} else {
+							this.router.navigate(['../'], { relativeTo: this.route });
+						}
+					})
+				},
+				error: (error: HttpErrorResponse) =>
+					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error),
+				complete: () =>
+					this.isLoading = false
 
-	guardar() {
-		const fotoRegistro: File = this.form.controls['fotografiaRegsitro'].value;
-		const curp: File = this.form.controls['curpArchivo'].value;
-		const comprobante: File = this.form.controls['comprobanteDomicilio'].value;
-		const actaNacimineto: File = this.form.controls['actaDeNacimiento'].value;
+
+			}
+		)
+	}
+
+
+	guardar(): void {
+		const fotoRegistro = this.form.controls['fotografiaRegsitro'].value;
+		const curp = this.form.controls['curpArchivo'].value;
+		const comprobante = this.form.controls['comprobanteDomicilio'].value;
+		const actaNacimineto = this.form.controls['actaDeNacimiento'].value;
+		console.log({ fotoRegistro }, { curp })
 		if (this.form.valid) {
 			const formData: UsuarioDTO = this.form.getRawValue();
-			this.isLoading = true
-			this.usuarioService.validarUsuario(formData.nombreUsuario, formData.correo).subscribe(
-				(response: any) => {
+			this.isLoading = true;
+			this.usuarioService.validarUsuario(formData.nombreUsuario, formData.correo).subscribe({
+				next: (response: any) => {
 					if (response.disponible) {
-						this.isAvalibleNombreUsuario = true;
-						this.isAvalibleNombreUsuario = true;
-						this.form.controls['correo'].setErrors({'emailAvalibleError': null})
-						this.form.controls['nombreUsuario'].setErrors({'usernameAvalibleError': null})
-						this.isLoading = true
-						this.usuarioService.guardar(formData, fotoRegistro, curp, actaNacimineto, comprobante).subscribe(
-							(response: any) => {
-								Swal.fire({
-									title: 'USUARIO GUARDADO',
-									text: 'El Usuario se Dio de alta Correotamente',
-									icon: 'success',
-									confirmButtonText: 'Capturar Nuevo Usuario',
-									showCancelButton: true,
-									cancelButtonText: 'Salir'
-								}).then(res => {
-									if (res.isConfirmed) {
-										this.form.reset();
-									} else {
-										this.router.navigate(['../'], {relativeTo: this.route});
-									}
-								})
-							}, (error: HttpErrorResponse) => {
-								Swal.fire({
-									title: 'ERROR',
-									text: error.message,
-									icon: 'error'
-								})
-							}, () => {
-								this.isLoading = false
-							}
-						)
+						this.guardarUsuario(formData, fotoRegistro.file, curp.file, actaNacimineto.file, comprobante.file);
 					} else {
 						this.isAvalibleCorreo = response.isCorreoDisponible;
 						this.isAvalibleNombreUsuario = response.isUsernameDisponible;
 						if (!this.isAvalibleCorreo) {
-							this.form.controls['correo'].setErrors({'emailAvalibleError': true})
+							this.form.controls['correo'].setErrors({ 'emailAvalibleError': true });
 						}
 						if (!this.isAvalibleNombreUsuario) {
-							this.form.controls['nombreUsuario'].setErrors({'usernameAvalibleError': true})
+							this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': true });
 						}
+						this._snakeBarService.openSnackBar('El nombre de usuario o  correo no esta disponible', TypeSnakBar.error);
 					}
-				}, (error: HttpErrorResponse) => {
-					Swal.fire({
-						title: 'ERROR',
-						icon: 'error',
-						text: error.message
-					})
-					console.log(error.message)
-				}, () => this.isLoading = false)
+				},
+				error: (error: HttpErrorResponse) =>
+					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error),
+				complete: () =>
+					this.isLoading = false
+
+			}
+			)
 		}
 	}
 
 	onGeneroChange() {
 		const genero = this.form.controls['genero'].value;
 		switch (genero) {
-			case '3' :
+			case '3':
 				this.form.controls['desGenero'].addValidators(Validators.required);
 				this.form.controls['desGenero'].setValue('');
 				this.form.controls['desGenero'].enable();
 				break;
-			default :
+			default:
 				const index = this.catalogoGenero.findIndex(g => {
-					return g.value == genero
+					return g.value == genero;
 				});
 
 				this.form.controls['desGenero'].setValue(this.catalogoGenero[index].label);
@@ -352,11 +320,6 @@ export class AltaUsuarioComponent implements OnInit {
 		}
 	}
 
-	generarUsernameAleatorio() {
-	}
-
-	generarpasswordAleatorio() {
-	}
 
 	calcularEdad(event: MatDatepickerInputEvent<any>) {
 		const fechaNacimiento = moment(event.value);
@@ -371,31 +334,23 @@ export class AltaUsuarioComponent implements OnInit {
 	}
 
 	private _filter_estados(value: string): ComboDTO[] {
-		return this.catalogoEstados.filter(option => option.label.toLowerCase().includes(value.toLowerCase()))
+		return this.catalogoEstados.filter(option => option.label.toLowerCase().includes(value.toLowerCase()));
 	}
 
 	private _filter_Municipios(value: string): ComboDTO[] {
-		return this.catalgoMunicipios.filter((option => option.label.toLowerCase().includes(value.toLowerCase())))
+		return this.catalgoMunicipios.filter((option => option.label.toLowerCase().includes(value.toLowerCase())));
 	}
 
 	private _filter_Asentaminetos(value: string): ComboDTO[] {
-		return this.catalogoAsentamietno.filter((option => option.label.toLowerCase().includes(value.toLowerCase())))
+		return this.catalogoAsentamietno.filter((option => option.label.toLowerCase().includes(value.toLowerCase())));
 	}
 
 	private _filter_Planteles(value: string): ComboDTO[] {
-		return this.catalogoPlanteles.filter((option) => option.label.toLowerCase().includes(value.toLowerCase()))
+		return this.catalogoPlanteles.filter((option) => option.label.toLowerCase().includes(value.toLowerCase()));
 	}
 
 	get f(): { [key: string]: AbstractControl } {
 		return this.form.controls;
 	}
 
-	handlerInitError(error: WebcamInitError) {
-		if (error.mediaStreamError && error.mediaStreamError.name === "NotAllowedError") {
-			this.hasCamera = false
-			console.warn("Camera access was not allowed by user!");
-		} else {
-			this.hasCamera = true;
-		}
-	}
 }
