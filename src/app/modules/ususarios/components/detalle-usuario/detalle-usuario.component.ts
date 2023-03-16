@@ -2,20 +2,31 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { UsuarioDetallerDTO } from '../../model/usuarioDetalle';
-
+import { FileEvidence } from '../../../../model/FileEvidence';
+export interface DataFromResolver {
+	usuario: any,
+	fotoRegistro: any;
+	curp: any;
+	actaNacimiento: any;
+	comprobanteDomicilio: any;
+	listaArchivos: any
+}
 @Component({
 	selector: 'app-detalle-usuario',
 	templateUrl: './detalle-usuario.component.html',
 	styleUrls: ['./detalle-usuario.component.sass']
 })
+
 export class DetalleUsuarioComponent implements OnInit {
-	form: any
+	form!: FormGroup;
+	archivosList: FileEvidence[] = [];
 	constructor(private fb: FormBuilder, private route: ActivatedRoute) {
 	}
 
 	ngOnInit(): void {
-		const dataUsuario = this.route.snapshot.data['data'];
-		this.initForm(dataUsuario);
+		const data: DataFromResolver = this.route.snapshot.data['data'];
+		this.archivosList = data.listaArchivos;
+		this.initForm(data.usuario);
 	}
 
 	initForm(dataUsuario: UsuarioDetallerDTO): void {
@@ -61,4 +72,6 @@ export class DetalleUsuarioComponent implements OnInit {
 	get f(): { [key: string]: AbstractControl } {
 		return this.form.controls;
 	}
+
+
 }

@@ -211,52 +211,28 @@
 			<mat-card>
 				<mat-card-header>
 					<mat-card-title>
-						Carga de documentos
+						Archivos
 					</mat-card-title>
 				</mat-card-header>
 				<div class="flex-row d-flex justify-content-center pt-2">
-					<div class="justify-content-center d-flex  pt-2 col-3">
+					<div *ngFor="let archivo of archivosList" class="justify-content-center d-flex  pt-2 col-3">
 						<mat-form-field>
 							<mat-label>
-								Fotografia
+								{{archivo.tipoArchivo}}
 							</mat-label>
-							<ngx-mat-file-input accept=".png, .jpg, .jpeg" [multiple]="false"
-								formControlName="fotografiaRegsitro">
+							<ngx-file-evidence [value]="archivo">
 
-							</ngx-mat-file-input>
+							</ngx-file-evidence>
 
 						</mat-form-field>
 
 					</div>
-					<div class="justify-content-center d-flex  pt-2 col-3">
-						<mat-form-field>
-							<mat-label>Curp</mat-label>
-							<ngx-mat-file-input formControlName="curpArchivo" [multiple]="false"
-								accept=".png,.jpg,.jpeg,.pdf">
 
-							</ngx-mat-file-input>
-
-						</mat-form-field>
-					</div>
-					<div class="justify-content-center d-flex  pt-2 col-3">
-						<mat-form-field>
-							<mat-label>Acta de nacimineto</mat-label>
-							<ngx-mat-file-input formControlName="actaDeNacimiento"></ngx-mat-file-input>
-
-						</mat-form-field>
-					</div>
-					<div class="justify-content-center d-flex  pt-2 col-3">
-						<mat-form-field>
-							<mat-label>Comprobante de domicilio</mat-label>
-							<ngx-mat-file-input formControlName="comprobanteDomicilio"></ngx-mat-file-input>
-
-						</mat-form-field>
-					</div>
 				</div>
 			</mat-card>
 			<div class="flex-row d-flex justify-content-start pt-2 ">
 				<div class=" pt-2 col-1 d-flex justify-content-center">
-					<button class="btn btn-success">Guardar <i class="fa-sharp fa-solid fa-floppy-disk"></i></button>
+					<button class="btn btn-success">Editar <i class="fa-sharp fa-solid fa-floppy-disk"></i></button>
 				</div>
 			</div>
 		</form>
