@@ -29,6 +29,21 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 	readonly EXTENCIONES_IMAGENES = 'image/*';
 	readonly ALL_EXTENCIONS = '*/*'
 	readonly IMAGENES = ['jpg', 'png', 'gif', 'svg', 'bmp']
+	@Input()
+	allowDownload: boolean = true;
+	@Input()
+	allowSelectFile: boolean = true;
+	@Input()
+	allowDropFile: boolean = true;
+	@Input()
+	allowCamera: boolean = true;
+	@Input()
+	allowPreView: boolean = true
+
+
+
+
+
 	_value !: FileEvidence | null;
 
 
@@ -88,6 +103,7 @@ export class NgxFileEvidenceComponent implements OnInit, OnDestroy, ControlValue
 	}
 
 	set disabled(dis) {
+		console.log('set disabled', dis)
 		this._disabled = coerceBooleanProperty(dis);
 		this.stateChanges.next();
 	}

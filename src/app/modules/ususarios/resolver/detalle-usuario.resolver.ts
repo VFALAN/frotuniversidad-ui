@@ -4,10 +4,9 @@ import {
 	RouterStateSnapshot,
 	ActivatedRouteSnapshot
 } from '@angular/router';
-import { Observable, of, forkJoin } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { UsuarioService } from '../services/usuario.service';
 import { ArchivosService } from '../../../services/archivos.service';
-import { CATALOGO_TIPO_ARCHIVO } from '../../../utils/Catalogos';
 
 @Injectable()
 export class DetalleUsuarioResolver implements Resolve<boolean> {

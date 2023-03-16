@@ -1,40 +1,41 @@
 <div id="fileEvidenceComponetContainer" class=" mat-form-field-wrapper">
 	<div class="mat-form-field-flex">
 		<div class="mat-form-field-infix">
-			<input [ngStyle]="{opacity:disabled ? 0.5:1}" [value]="_value?.nombre" matInput
+			<input [ngStyle]="{opacity:disabled ? 0.5:1}" [value]="_value?.nombre" matInput [disabled]="disabled"
 				[placeholder]="_placeholder">
 		</div>
 		<div class="mat-form-field-suffix">
 			<button class="btnFileEvidence mat-focus-indicator mat-icon-button mat-button-base" type="button"
-				*ngIf="enableSelectFile" #uploadButton matTooltip="Seleccione Un Archivo" mat-icon-button matSuffix
-				(click)="f_input.click()">
+				[disabled]="disabled" *ngIf="enableSelectFile && allowSelectFile" #uploadButton matTooltip="Seleccione Un Archivo"
+				mat-icon-button matSuffix (click)="f_input.click()">
 				<mat-icon>attach_file</mat-icon>
 			</button>
 		</div>
 		<div class="mat-form-field-suffix"><button
 				class="btnFileEvidence mat-icon-button mat-focus-indicator mat-button-base" type="button"
-				*ngIf="enableDownload" (click)="download()" matTooltip="Descargar Archivo" #downloadButton
-				mat-icon-button matSuffix>
+				 *ngIf="enableDownload && allowDownload" (click)="download()" matTooltip="Descargar Archivo"
+				#downloadButton mat-icon-button matSuffix>
 				<mat-icon>download</mat-icon>
 			</button></div>
 
 		<div class="mat-form-field-suffix"><button class="btnFileEvidence mat-icon-button mat-button-base" type="button"
-				(click)="preview()" *ngIf="enablePreView" #preViewButton matTooltip="Pre Visualizar Archivo"
-				mat-icon-button matSuffix>
+				 (click)="preview()" *ngIf="enablePreView && allowPreView" #preViewButton
+				matTooltip="Pre Visualizar Archivo" mat-icon-button matSuffix>
 				<mat-icon>
 					preview
 				</mat-icon>
 			</button></div>
 
-		<div class="mat-form-field-suffix"><button class="btnFileEvidence" type="button" *ngIf="enableDropFile"
-				matTooltip="Borrar" (click)="dropFile()" #deleteButton mat-icon-button matSuffix>
+		<div class="mat-form-field-suffix"><button class="btnFileEvidence" type="button" *ngIf="enableDropFile && allowDropFile"
+				[disabled]="disabled" matTooltip="Borrar" (click)="dropFile()" #deleteButton mat-icon-button matSuffix>
 				<mat-icon>
 					delete
 				</mat-icon>
 			</button></div>
 
-		<div class="mat-form-field-suffix"><button class="btnFileEvidence" type="button" *ngIf="enableCamera"
-				matTooltip="Tomar Fotografia" (click)="takePicture()" #cameraButton mat-icon-button matSuffix>
+		<div class="mat-form-field-suffix"><button class="btnFileEvidence" type="button" *ngIf="enableCamera && allowCamera"
+				[disabled]="disabled" matTooltip="Tomar Fotografia" (click)="takePicture()" #cameraButton
+				mat-icon-button matSuffix>
 				<mat-icon>
 					photo_camera
 				</mat-icon>
