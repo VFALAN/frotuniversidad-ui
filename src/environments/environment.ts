@@ -8,7 +8,8 @@ export const environment = {
   apis : {
     auth : 'msuniversidad-auth/api/',
     usuarios : 'msuniversidad-usuarios/api/',
-	minio:'msuniversidad-minio/api/'
+	minio:'msuniversidad-minio/api/',
+	notificaciones : 'msuniversidad-notificaciones'
   }
 };
 

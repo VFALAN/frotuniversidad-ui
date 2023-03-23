@@ -5,10 +5,6 @@ import { UsuarioDetallerDTO } from '../../model/usuarioDetalle';
 import { FileEvidence } from '../../../../model/FileEvidence';
 export interface DataFromResolver {
 	usuario: any,
-	fotoRegistro: any;
-	curp: any;
-	actaNacimiento: any;
-	comprobanteDomicilio: any;
 	listaArchivos: any
 }
 @Component({
@@ -20,12 +16,14 @@ export interface DataFromResolver {
 export class DetalleUsuarioComponent implements OnInit {
 	form!: FormGroup;
 	archivosList: FileEvidence[] = [];
+	idUsuario!: number;
 	constructor(private fb: FormBuilder, private route: ActivatedRoute) {
 	}
 
 	ngOnInit(): void {
 		const data: DataFromResolver = this.route.snapshot.data['data'];
 		this.archivosList = data.listaArchivos;
+		this.idUsuario = data.usuario.idUsuario;
 		this.initForm(data.usuario);
 	}
 

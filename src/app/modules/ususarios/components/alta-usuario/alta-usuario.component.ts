@@ -8,13 +8,12 @@ import { CATALOGO_ESTATUS, CATALOGO_GENERO, CATALOGO_PERFILES } from "../../../.
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import * as moment from "moment";
 import { map, Observable, startWith, Subject } from "rxjs";
-import { HttpErrorResponse } from "@angular/common/http";
 import Validation from "../../../../utils/Validation";
 import Swal from 'sweetalert2'
 import { UsuarioDTO } from "../../model/usuario-dto";
 import { SnackService } from '../../../../services/snack.service';
 import { TypeSnakBar } from '../../../../utils/TypeSnakBar.enum';
-import { FileEvidence } from '../../../../model/FileEvidence';
+import { filterComboDTO } from 'src/app/utils/FilterUtils';
 
 
 @Component({
@@ -23,9 +22,7 @@ import { FileEvidence } from '../../../../model/FileEvidence';
 	styleUrls: ['./alta-usuario.component.sass']
 })
 export class AltaUsuarioComponent implements OnInit {
-	@ViewChild('btnCloseModal', { static: false })
-	bntCloseModal !: ElementRef;
-	hasCamera: boolean = false;
+
 	startDate = new Date(1980, 0, 1);
 	hidePassword = true;
 	hideConfirmPasswod = true;
@@ -109,13 +106,11 @@ export class AltaUsuarioComponent implements OnInit {
 		);
 		this.filtredEstados = this.form.controls['estado'].valueChanges.pipe(
 			startWith(''),
-			map(value => this._filter_estados(value || ''))
+			map(value => filterComboDTO(value || '', this.catalogoEstados))
 		);
 
 	}
-	mostrar() {
-		console.log(this.form.getRawValue());
-	}
+
 	onAsentamientoChange(event: any) {
 		const idAsentamiento = event.option.value;
 		const index = this.catalogoAsentamietno.findIndex(e => {
@@ -126,25 +121,19 @@ export class AltaUsuarioComponent implements OnInit {
 		this.form.controls['asentamiento'].setValue(asentamiento.label);
 	}
 
-	onPlantelChange(event: any) {
+	onPlantelChange(event: any): void {
 
 		const idPlantel = event.option.value;
 		const index = this.catalogoPlanteles.findIndex(p => {
 			return p.value == idPlantel
-		})
+		});
 		const plantel = this.catalogoPlanteles[index]
 		this.form.controls['plantel'].setValue(plantel.label);
 		this.form.controls['idPlantel'].setValue(idPlantel);
 		this.catalogoService.getCarreras(idPlantel).subscribe({
 			next: (response: ComboDTO[]) =>
-				this.catalogoCarreras = response,
-			error: (error: HttpErrorResponse) =>
-				this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error)
-		})
-	}
-
-	onCarreraChange(event: any) {
-
+				this.catalogoCarreras = response
+		});
 	}
 
 	onEstadoChange(event: any) {
@@ -162,12 +151,10 @@ export class AltaUsuarioComponent implements OnInit {
 					this.filtredMunicipios = this.form.controls['municipio'].valueChanges.pipe(
 						startWith(''),
 						map(value =>
-							this._filter_Municipios(value || '')
+							filterComboDTO(value || '', this.catalgoMunicipios)
 						)
 					);
-				},
-				error: (error: HttpErrorResponse) =>
-					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error)
+				}
 			});
 		if (this.form.controls['idPerfil'] != null) {
 			this.loadPlanteles(this.f['idEstado'].value);
@@ -191,13 +178,10 @@ export class AltaUsuarioComponent implements OnInit {
 				this.filtredAsentaminetos = this.form.controls['asentamiento'].valueChanges.pipe(
 					startWith(''),
 					map(value =>
-						this._filter_Asentaminetos(value || '')
+						filterComboDTO(value || '', this.catalogoAsentamietno)
 					)
 				);
-			}),
-			error: (error: HttpErrorResponse) =>
-				this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error)
-
+			})
 		},)
 	}
 
@@ -216,14 +200,14 @@ export class AltaUsuarioComponent implements OnInit {
 	}
 
 	private loadPlanteles(idEstado: any): void {
-		this.catalogoService.getPlanteles(idEstado).subscribe((response: ComboDTO[]) => {
-			this.catalogoPlanteles = response;
-			this.filtredPlanteles = this.form.controls['plantel'].valueChanges.pipe(
-				startWith(''),
-				map(value => this._filter_Planteles(value || ''))
-			)
-		}, (error: HttpErrorResponse) => {
-			console.log(error.message);
+		this.catalogoService.getPlanteles(idEstado).subscribe({
+			next: (response: ComboDTO[]) => {
+				this.catalogoPlanteles = response;
+				this.filtredPlanteles = this.form.controls['plantel'].valueChanges.pipe(
+					startWith(''),
+					map(value => filterComboDTO(value || '', this.catalogoPlanteles))
+				)
+			}
 		})
 	}
 	private guardarUsuario(pFormData: UsuarioDTO, pFotoRegistro: File, pCurp: File, pActaNacimiento: File, pComprobante: File): void {
@@ -248,9 +232,7 @@ export class AltaUsuarioComponent implements OnInit {
 							this.router.navigate(['../'], { relativeTo: this.route });
 						}
 					})
-				},
-				error: (error: HttpErrorResponse) =>
-					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error)
+				}
 			}
 		)
 	}
@@ -261,40 +243,29 @@ export class AltaUsuarioComponent implements OnInit {
 		const curp = this.form.controls['curpArchivo'].value;
 		const comprobante = this.form.controls['comprobanteDomicilio'].value;
 		const actaNacimineto = this.form.controls['actaDeNacimiento'].value;
-		console.log({ fotoRegistro }, { curp })
 		if (this.form.valid) {
 			const formData: UsuarioDTO = this.form.getRawValue();
 			this.usuarioService.validarUsuario(formData.nombreUsuario, formData.correo).subscribe({
 				next: (response: any) => {
 					if (response.disponible) {
-
 						this.guardarUsuario(formData, fotoRegistro.file, curp.file, actaNacimineto.file, comprobante.file);
-
 					} else {
 						this.writeError(response)
 					}
-				},
-				error: (error: HttpErrorResponse) =>
-					this._snakeBarService.openSnackBar(error.message, TypeSnakBar.error)
-			}
-			)
+				}
+			});
 		}
 	}
 	writeError(response: any): void {
 		this.isAvalibleCorreo = response.isCorreoDisponible;
 		this.isAvalibleNombreUsuario = response.isUsernameDisponible;
 		if (!this.isAvalibleCorreo) {
-
 			this.form.controls['correo'].setErrors({ 'emailAvalibleError': true })
 		}
 		if (!this.isAvalibleNombreUsuario) {
 			this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': true })
+		}
 
-			this.form.controls['correo'].setErrors({ 'emailAvalibleError': true });
-		}
-		if (!this.isAvalibleNombreUsuario) {
-			this.form.controls['nombreUsuario'].setErrors({ 'usernameAvalibleError': true });
-		}
 		this._snakeBarService.openSnackBar('El nombre de usuario o  correo no esta disponible', TypeSnakBar.error);
 	}
 	onGeneroChange() {
@@ -321,27 +292,6 @@ export class AltaUsuarioComponent implements OnInit {
 		const fechaActual = moment(new Date());
 		const diferencia = fechaActual.diff(fechaNacimiento, 'years');
 		this.form.controls['edad'].setValue(diferencia);
-	}
-
-	validarPassword() {
-		const actualPassword = this.form.controls['password'].value;
-
-	}
-
-	private _filter_estados(value: string): ComboDTO[] {
-		return this.catalogoEstados.filter(option => option.label.toLowerCase().includes(value.toLowerCase()));
-	}
-
-	private _filter_Municipios(value: string): ComboDTO[] {
-		return this.catalgoMunicipios.filter((option => option.label.toLowerCase().includes(value.toLowerCase())));
-	}
-
-	private _filter_Asentaminetos(value: string): ComboDTO[] {
-		return this.catalogoAsentamietno.filter((option => option.label.toLowerCase().includes(value.toLowerCase())));
-	}
-
-	private _filter_Planteles(value: string): ComboDTO[] {
-		return this.catalogoPlanteles.filter((option) => option.label.toLowerCase().includes(value.toLowerCase()));
 	}
 
 	get f(): { [key: string]: AbstractControl } {

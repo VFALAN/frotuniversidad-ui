@@ -1,1 +1,450 @@
-<p>editar-usuario works!</p>
+<div class="container-fluid">
+	<div class="flex-row">
+		<div class=" px-2 col-12">
+			<app-menu>
+			</app-menu>
+		</div>
+		<div class="mx-2 pt-2 col-1 d-flex justify-content-start">
+			<button mat-button [routerLink]="'../'" color="primary">
+				<mat-icon>arrow_back</mat-icon> Regresar
+			</button>
+		</div>
+	</div>
+	<mat-card class="pt-2">
+		<form [formGroup]="form">
+			<mat-card class="pt-2">
+				<mat-card-header>
+					<mat-card-title>Informacion Personal</mat-card-title>
+				</mat-card-header>
+
+				<mat-card-content>
+					<div class="flex-row d-flex pt-2 ">
+						<div class=" pt-2 col-3 d-flex justify-content-center ">
+							<mat-form-field>
+								<mat-label>Nombre</mat-label>
+								<input formControlName="nombre"
+									(change)="f['nombre'].setValue(f['nombre'].value.toUpperCase())"
+									placeholder="Ingresa Tu Nombre" matInput type="text">
+								<button *ngIf="f['nombre'].value!=null" (click)="f['nombre'].setValue(null)"
+									mat-icon-button matSuffix>
+									<mat-icon>close</mat-icon>
+								</button>
+								<mat-error *ngIf="f['nombre'].errors && (f['nombre'].touched || f['nombre'].dirty)">
+									*Campo Requerido
+								</mat-error>
+							</mat-form-field>
+
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Apellido Paterno</mat-label>
+								<input formControlName="apellidoPaterno"
+									(change)="f['apellidoPaterno'].setValue(f['apellidoPaterno'].value.toUpperCase())"
+									placeholder="Ingresa Tu Apellido Paterno" matInput type="text">
+								<button *ngIf="f['apellidoPaterno'].value!=null"
+									(click)="f['apellidoPaterno'].setValue(null)" mat-icon-button matSuffix>
+									<mat-icon>close</mat-icon>
+								</button>
+								<mat-error
+									*ngIf="f['apellidoPaterno'].hasError('required') && (f['apellidoPaterno'].touched || f['apellidoPaterno'].dirty)">
+									*Campo Requerido
+								</mat-error>
+							</mat-form-field>
+
+						</div>
+						<div class=" pt-2 col-3 d-flex  justify-content-center">
+							<mat-form-field>
+								<mat-label>Apellido Materno</mat-label>
+								<input matInput
+									(change)="f['apellidoMaterno'].setValue(f['apellidoMaterno'].value.toUpperCase())"
+									placeholder="Ingresa Tu Apellido" formControlName="apellidoMaterno" type="text">
+								<button *ngIf="f['apellidoMaterno'].value!=null"
+									(click)="f['apellidoMaterno'].setValue(null)" mat-icon-button matSuffix>
+									<mat-icon>close</mat-icon>
+								</button>
+								<mat-error
+									*ngIf="f['apellidoMaterno'].hasError('required') && (f['apellidoMaterno'].touched || f['apellidoMaterno'].dirty)">
+									*Campo Requerido
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Fecha De Nacimiento</mat-label>
+								<input matInput (dateChange)="calcularEdad($event)" formControlName="fechaNacimiento"
+									[matDatepicker]="fechaNaciminetoPicker">
+								<button *ngIf="f['fechaNacimiento'].value!=null"
+									(click)="f['fechaNacimiento'].setValue(null)" mat-icon-button matSuffix>
+									<mat-icon>close</mat-icon>
+								</button>
+								<mat-datepicker-toggle matSuffix [for]="fechaNaciminetoPicker"></mat-datepicker-toggle>
+								<mat-datepicker startView="multi-year" [startAt]="startDate"
+									#fechaNaciminetoPicker></mat-datepicker>
+								<mat-error
+									*ngIf="f['fechaNacimiento'].hasError('required') && (f['fechaNacimiento'].touched || f['fechaNacimiento'].dirty)">
+									*Campo Requerido
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="flex-row pt-2  d-flex">
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Edad</mat-label>
+								<input matInput formControlName="edad" type="text">
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Curp</mat-label>
+								<input matInput formControlName="curp" placeholder="Ingresa Tu CURP" type="text">
+								<button *ngIf="f['curp'].value!=null" (click)="f['curp'].setValue(null)" mat-icon-button
+									matSuffix>
+									<mat-icon>close</mat-icon>
+								</button>
+								<mat-error
+									*ngIf="f['curp'].hasError('required') && (f['curp'].touched || f['curp'].dirty)">
+									*Campo Requerido
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Genero</mat-label>
+								<mat-select (selectionChange)="onGeneroChange()" [compareWith]="compareCombo"
+									formControlName="genero">
+									<mat-option *ngFor="let gen of catalogoGenero" [value]="gen.value">
+										{{gen.label}}
+									</mat-option>
+								</mat-select>
+								<mat-error
+									*ngIf="f['genero'].hasError('required') && (f['genero'].touched || f['genero'].dirty)">
+									*Campo Requerido
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Descripcion Genero</mat-label>
+								<input matInput placeholder="Ingresa Tu Genero" formControlName="desGenero" type="text">
+								<mat-error
+									*ngIf="f['desGenero'].errors && (f['desGenero'].touched || f['desGenero'].dirty)">
+									*Campo Requerido
+								</mat-error>
+
+							</mat-form-field>
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-card>
+			<mat-card class="pt-2">
+				<mat-card-header>
+					<mat-card-title>
+						Dirección
+					</mat-card-title>
+				</mat-card-header>
+				<mat-card-content>
+					<div class="flex-row d-flex">
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Estado</mat-label>
+								<input matInput formControlName="estado" [matAutocomplete]="estadoAuto">
+								<button mat-icon-button matSuffix
+									(click)="f['estado'].setValue(null);f['idEstado'].setValue(null);">
+									<mat-icon>close</mat-icon>
+								</button>
+								<mat-autocomplete (optionSelected)="onEstadoChange($event)" autoActiveFirstOption
+									#estadoAuto="matAutocomplete">
+									<mat-option *ngFor="let option of filtredEstados | async" [value]="option.value">
+										{{option.label}}
+									</mat-option>
+								</mat-autocomplete>
+								<mat-error *ngIf="f['estado'].errors && (f['estado'].touched || f['estado'].dirty)">
+									*Campo Requerido
+								</mat-error>
+								<mat-error *ngIf="f['estado'].hasError('faltante')">
+									*Campo Requerido
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Municipio</mat-label>
+								<input matInput formControlName="municipio" [matAutocomplete]="municipioAuto">
+								<button *ngIf="f['municipio'].value!=null" (click)="f['idMunicipio'].setValue(null)"
+									mat-icon-button matSuffix>
+									<mat-icon>close</mat-icon>
+								</button>
+								<mat-autocomplete #municipioAuto="matAutocomplete"
+									(optionSelected)="onMunicipioChange($event)">
+									<mat-option *ngFor="let option of filtredMunicipios |async" [value]="option.value">
+										{{option.label}}
+									</mat-option>
+								</mat-autocomplete>
+								<mat-error
+									*ngIf="f['municipio'].errors && (f['municipio'].touched || f['municipio'].dirty)">
+									*Campo Requerido
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Asentamiento</mat-label>
+								<input matInput formControlName="asentamiento" [matAutocomplete]="asentamientoAuto">
+								<button mat-icon-button matSuffix
+									(click)="f['asentamiento'].setValue(null);f['idAsentamiento'].setValue(null);">
+									<mat-icon>close</mat-icon>
+								</button>
+								<mat-autocomplete #asentamientoAuto="matAutocomplete"
+									(optionSelected)="onAsentamientoChange($event)">
+									<mat-option *ngFor="let option of filtredAsentamientos|async"
+										[value]="option.value">
+										{{option.label}}
+									</mat-option>
+								</mat-autocomplete>
+								<mat-error
+									*ngIf="f['asentamiento'].errors && (f['asentamiento'].touched || f['asentamiento'].dirty)">
+									*Campo Requerido
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label> Calle</mat-label>
+								<input formControlName="calle" matInput>
+								<button mat-icon-button matSuffix
+									(click)="f['calle'].setValue(null);f['calle'].setValue(null);">
+									<mat-icon>close</mat-icon>
+								</button>
+								<mat-error *ngIf="f['calle'].errors && (f['calle'].touched || f['calle'].dirty)">
+									*Campo Requerido
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="flex-row d-flex">
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Numero Exterior</mat-label>
+								<input matInput type="text" formControlName="numeroExterior">
+								<button mat-icon-button matSuffix
+									(click)="f['numeroExterior'].setValue(null);f['numeroExterior'].setValue(null);">
+									<mat-icon>close</mat-icon>
+								</button>
+								<mat-error
+									*ngIf="f['numeroExterior'].errors && (f['numeroExterior'].touched || f['numeroExterior'].dirty)">
+									*Campo Requerido
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Numero Interior</mat-label>
+								<input matInput type="text" formControlName="numeroInterior"></mat-form-field>
+							<button mat-icon-button matSuffix
+								(click)="f['numeroInterior'].setValue(null);f['numeroInterior'].setValue(null);">
+								<mat-icon>close</mat-icon>
+							</button>
+							<mat-error
+								*ngIf="f['numeroInterior'].errors && (f['numeroInterior'].touched || f['numeroInterior'].dirty)">
+								*Campo Requerido
+							</mat-error>
+						</div>
+
+						<div class=" pt-2 col-3 d-flex justify-content-center">
+							<mat-form-field>
+								<mat-label>Fachada</mat-label>
+								<input matInput formControlName="desFachada" type="text"></mat-form-field>
+							<button mat-icon-button matSuffix
+								(click)="f['desFachada'].setValue(null);f['desFachada'].setValue(null);">
+								<mat-icon>close</mat-icon>
+							</button>
+							<mat-error
+								*ngIf="f['desFachada'].errors && (f['desFachada'].touched || f['desFachada'].dirty)">
+								*Campo Requerido
+							</mat-error>
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-card>
+			<mat-card class="pt-2">
+				<mat-card-header>
+					<mat-card-title>
+						Usuario
+					</mat-card-title>
+				</mat-card-header>
+				<div class="flex-row d-flex">
+					<div class=" pt-2 col-3 d-flex justify-content-center">
+						<mat-form-field>
+							<mat-label>Nombre de usuario</mat-label>
+							<input formControlName="nombreUsuario" matInput type="text">
+						</mat-form-field>
+					</div>
+					<div class=" pt-2 col-3 d-flex justify-content-center">
+						<mat-form-field>
+							<mat-label>Correo</mat-label>
+							<input matInput formControlName="correo" type="text">
+							<button mat-icon-button matSuffix *ngIf="f['corre']!=null"
+								(click)="f['correo'].setValue('')">
+								<mat-icon>close</mat-icon>
+							</button>
+							<mat-error
+								*ngIf="f['correo'].hasError('required') && (f['correo'].touched || f['correo'].dirty)">
+								*Campo Requerido
+							</mat-error>
+							<mat-error
+								*ngIf="f['correo'].hasError('email') && (f['correo'].touched || f['correo'].dirty)">
+								Formato no Valido
+							</mat-error>
+							<mat-error
+								*ngIf="f['correo'].hasError('emailAvalibleError') && (f['correo'].touched || f['correo'].dirty)">
+								El Correo no esta disponible
+							</mat-error>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="flex-row d-flex">
+					<div class=" pt-2 col-3 d-flex justify-content-center">
+						<mat-form-field>
+							<mat-label>Perfil</mat-label>
+							<mat-select [compareWith]="compareCombo" (selectionChange)="onPerfilChange()"
+								formControlName="idPerfil">
+								<mat-option *ngFor="let opt of catalogoPerfil" [value]="opt.value">
+									{{opt.label}}
+								</mat-option>
+							</mat-select>
+							<mat-error
+								*ngIf="f['idPerfil'].hasError('required') && (f['idPerfil'].touched || f['idPerfil'].dirty) ">
+								*Campo Requerido
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class=" pt-2 col-3 d-flex justify-content-center">
+						<mat-form-field>
+							<mat-label>Estatus</mat-label>
+							<mat-select formControlName="idEstatus" [compareWith]="compareCombo">
+								<mat-option *ngFor="let opt of catalogoEstaus" [value]="opt.value">
+									{{opt.label}}
+								</mat-option>
+							</mat-select>
+							<mat-error
+								*ngIf="f['idEstatus'].hasError('required') && (f['idEstatus'].touched || f['idEstatus'].dirty) ">
+								*Campo Requerido
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class=" pt-2 col-3 d-flex justify-content-center"
+						*ngIf="f['idPerfil'].value!=null&&f['idPerfil'].value != '1'">
+						<mat-form-field>
+							<mat-label>Plantel</mat-label>
+							<input matInput formControlName="plantel" [matAutocomplete]="plantelAuto" type="text">
+							<button mat-icon-button matSuffix *ngIf="f['plantel'].value!=null " (click)="f['plantel'].setValue(null);
+							f['idPlantel'].setValue(null)">
+								<mat-icon>close</mat-icon>
+							</button>
+							<mat-autocomplete autoActiveFirstOption (optionSelected)="onPlantelChange($event)"
+								#plantelAuto="matAutocomplete">
+								<mat-option *ngFor="let option of filtredPlanteles | async " [value]="option.value">
+									{{option.label}}
+								</mat-option>
+							</mat-autocomplete>
+
+							<mat-error
+								*ngIf="f['plantel'].hasError('required') && (f['plantel'].touched || f['plantel'].dirty)">
+								*Campo Requerido
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class=" pt-2 col-3 d-flex justify-content-center"
+						*ngIf="(f['idPerfil'].value!=null) && (f['idPerfil'].value==2 ||f['idPerfil'].value==4)">
+						<mat-form-field>
+							<mat-label>Carrera</mat-label>
+							<mat-select formControlName="idCarrera" [compareWith]="compareCombo">
+								<mat-option *ngFor="let carrera of catalogoCarreras" [value]="carrera.value">
+									{{carrera.label}}
+								</mat-option>
+							</mat-select>
+							<mat-error
+								*ngIf="f['carrera'].hasError('required') && (f['carrera'].touched || f['carrera'].dirty)">
+								*Campo Requerido
+							</mat-error>
+						</mat-form-field>
+					</div>
+				</div>
+			</mat-card>
+		</form>
+		<form [formGroup]="formArchivos">
+			<mat-card>
+				<mat-card-header>
+					<mat-card-title>
+						Carga de documentos
+					</mat-card-title>
+				</mat-card-header>
+				<div class="flex-row d-flex justify-content-center pt-2">
+					<div class="justify-content-center d-flex  pt-2 col-3">
+						<mat-form-field>
+							<mat-label>
+								Fotografia
+							</mat-label>
+
+							<ngx-file-evidence formControlName="fotografiaRegsitro"></ngx-file-evidence>
+
+							<mat-error
+								*ngIf="fa['fotografiaRegsitro'].hasError('required') && (fa['fotografiaRegsitro'].touched || fa['fotografiaRegsitro'].dirty)">
+								*Campo Requerido
+							</mat-error>
+						</mat-form-field>
+
+					</div>
+					<div class="justify-content-center d-flex  pt-2 col-3">
+						<mat-form-field>
+							<mat-label>Curp</mat-label>
+
+							<ngx-file-evidence formControlName="curpArchivo"></ngx-file-evidence>
+
+							<mat-error
+								*ngIf="fa['curpArchivo'].hasError('required') && (fa['curpArchivo'].touched || fa['curpArchivo'].dirty)">
+								Campo Requerido
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="justify-content-center d-flex  pt-2 col-3">
+						<mat-form-field>
+							<mat-label>Acta de nacimineto</mat-label>
+							<ngx-file-evidence formControlName="actaDeNacimiento"></ngx-file-evidence>
+							<mat-error
+								*ngIf="fa['actaDeNacimiento'].hasError('required') && (fa['actaDeNacimiento'].touched || fa['actaDeNacimiento'].dirty)">
+								Campo Requerido
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="justify-content-center d-flex  pt-2 col-3">
+						<mat-form-field>
+							<mat-label>Comprobante de domicilio</mat-label>
+							<ngx-file-evidence formControlName="comprobanteDomicilio"></ngx-file-evidence>
+							<mat-error
+								*ngIf="fa['comprobanteDomicilio'].hasError('required') && (fa['comprobanteDomicilio'].touched || fa['comprobanteDomicilio'].dirty)">
+								Campo Requerido
+							</mat-error>
+						</mat-form-field>
+					</div>
+				</div>
+			</mat-card>
+		</form>
+		<div class="flex-row d-flex justify-content-start pt-2 ">
+			<div class="pt-2 col-2 d-flex justify-content-center ">
+
+				<button (click)="confimarGuardado()" [disabled]="!form.valid && !formArchivos.valid" color="primary"
+					class="mx-2" mat-button>Guardar
+					<mat-icon>save</mat-icon>
+				</button>
+				<button color="basic" class="mx-2" mat-button routerLink="../../">
+					cancelar
+					<mat-icon>close</mat-icon>
+				</button>
+
+			</div>
+		</div>
+
+	</mat-card>
+</div>

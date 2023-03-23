@@ -29,11 +29,16 @@ export class ArchivosService {
 		return this._http.get<FileEvidence[]>(`${this._baseUrl}file/getFilesByUser`, opt)
 	}
 
-	getFileByUserAndType(idUsaurio: any, idTIpoArchivo: any, limite = 1): Observable<FileEvidence[]> {
+	getFileByUserAndTypeWhitLimit(idUsaurio: any, idTIpoArchivo: any, limite = 1): Observable<FileEvidence[]> {
 		const opt = {
-			params: {idUsaurio,idTIpoArchivo,limite}
+			params: { idUsaurio, idTIpoArchivo, limite }
 		}
 		return this._http.get<FileEvidence[]>(`${this._baseUrl}file/getByUserAndType`, opt)
 	}
-
+	getFileByUserAndType(idUsaurio: any, idTIpoArchivo: any): Observable<FileEvidence[]> {
+		const opt = {
+			params: { idUsaurio, idTIpoArchivo }
+		}
+		return this._http.get<FileEvidence[]>(`${this._baseUrl}file/getByUserAndType`, opt)
+	}
 }

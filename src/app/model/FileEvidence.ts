@@ -10,6 +10,7 @@ export class FileEvidence {
 	type!: string;
 	isDropeedFile: boolean = false;
 	mineType!: string;
-	constructor() { /* TODO document why this constructor is empty */  }
+	idTipoArchivo!: number;
+	constructor() { /* TODO document why this constructor is empty */ }
 
 }

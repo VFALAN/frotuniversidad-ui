@@ -7,6 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { GeneralComponentsModule } from './modules/general-components/general-components.module';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { ErrorAlertInterceptor } from './interceptors/error-alert.interceptor';
+import { interceptorProviders } from './interceptors/provider-iterceptors';
 
 
 @NgModule({
@@ -22,9 +24,8 @@ import { LoadingInterceptor } from './interceptors/loading.interceptor';
 		GeneralComponentsModule
 
 	],
-	providers: [HttpClientModule, {
-		provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
-	}],
+	providers: [HttpClientModule,
+		interceptorProviders],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }
